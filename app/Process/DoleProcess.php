@@ -3,6 +3,11 @@
 
     use Illuminate\Support\Facades\Hash;
     use App\Models\validationcode;
+    use App\Models\details;
+    
+    use App\Models\tardyundertimetbls;
+    use App\Models\inclusivedates;
+    use App\Models\leavecards;
 
 	use DateTime;
 
@@ -41,20 +46,28 @@
 
                         if (date("m/d/Y", strtotime($td->theattendance)) == date("m/d/Y", strtotime($thedate)) ) {
                             if ($td->timeactual == "am_start") {
-                                $am_start = date("h:i A", strtotime($td->theattendance));
+                                if ($am_start == null) {
+                                    $am_start = date("h:i A", strtotime($td->theattendance));
+                                }
                                 // $am_start = date("H:i:s", strtotime($td->theattendance));
                             }
 
                             if ($td->timeactual == "am_end") {
-                                $am_end = date("h:i A", strtotime($td->theattendance));
+                                if ($am_end == null) {
+                                    $am_end = date("h:i A", strtotime($td->theattendance));
+                                }
                             }
 
                             if ($td->timeactual == "pm_start") {
-                                $pm_start = date("h:i A", strtotime($td->theattendance));
+                                if ($pm_start == null) {
+                                    $pm_start = date("h:i A", strtotime($td->theattendance));
+                                }
                             }
 
                             if ($td->timeactual == "pm_end") {
-                                $pm_end = date("h:i A", strtotime($td->theattendance));
+                                if ($pm_end == null) {
+                                    $pm_end = date("h:i A", strtotime($td->theattendance));
+                                }
                             }
                         }
                     }
@@ -106,7 +119,7 @@
                                         $tardy_count++;
                                     }
                                     // end computation of morning tardiness
-                                   // =====================================
+                                    // =====================================
 
                                     // =====================================
                                     // computation for afternoon tardy
@@ -179,8 +192,6 @@
                         $total_tardiness   = date("H:i:s", strtotime($tardy)+$tardy_secs);
                     // end for the computation of total tardiness
 
-
-
                     $thedtr[date("m/d/Y", strtotime($thedate))] 				  = [];
                     $thedtr[date("m/d/Y", strtotime($thedate))]['am_start'] 	  = $am_start;
                     $thedtr[date("m/d/Y", strtotime($thedate))]['am_end'] 		  = $am_end;
@@ -223,6 +234,7 @@
             // $mins_days  = ($mins/480);  // in days
 
             $hrs_in_days = [
+                "00" => "0.000",
                 "01" => "0.125",
                 "02" => "0.250",
                 "03" => "0.375",
@@ -234,15 +246,16 @@
             ];
 
             $mins_in_days = [
-                "1"  => "0.002",
-                "2"  => "0.004",
-                "3"  => "0.006",
-                "4"  => "0.008",
-                "5"  => "0.010",
-                "6"  => "0.012",
-                "7"  => "0.015",
-                "8"  => "0.017",
-                "9"  => "0.019",
+                "00" => "0.000",
+                "01" => "0.002",
+                "02" => "0.004",
+                "03" => "0.006",
+                "04" => "0.008",
+                "05" => "0.010",
+                "06" => "0.012",
+                "07" => "0.015",
+                "08" => "0.017",
+                "09" => "0.019",
                 "10" => "0.021",
                 "11" => "0.023",
                 "12" => "0.025",
@@ -307,20 +320,92 @@
             return [$hrs_days+$mins_days,$hrstomins+$mins];
         }
 
-        public static function savevalidation($typeofdocument,$personnelid) {
+        public static function savevalidation($typeofdocument,$personnelid, $details = false) {
             $thecode      = Hash::make(date("mdYhis").rand().$personnelid);
 
             $pattern      = '/\//i';
             $thecleancode = preg_replace($pattern, '_', $thecode);
             
+            $grpid        = date("mdYHis").$personnelid;
+
             $d = validationcode::create([
                 "typeofdocument"    => $typeofdocument,
                 "thecode"           => $thecleancode,
                 "personnelid"       => $personnelid,
-                "detailsid"         => 0
+                "detailsid"         => $grpid
             ]);
 
+            $detailsid = null;
+
+            foreach($details as $key => $ds) {
+                $detailsid = details::create([
+                    "groupid"   => $grpid,
+                    "thefield"  => $key,
+                    "thevalue"  => $ds
+                ]);
+            }
+
             return [$d,$thecleancode];
+        }
+
+        public static function checksettings($nav) {
+            if (session($nav) == NULL ) {
+                // add code here 
+                    // -------
+
+                    // -------
+                // end adding of code here
+                die("It seems like you are accessing something thats beyond your control, your footprint has been recorded. You are not allowed here.");
+            }
+        }
+
+        public static function savetardyundertime($personnelid, $typeofitem, $thevalue, $thedate) {
+            // $dateinquestionid = dateoftheundertime_typeofitem_personnelid
+            $dateinquestionid    = date("mdY", strtotime($thedate))."_".$typeofitem."_".$personnelid;
+            // tardyundertimetbls
+
+            // tardiness
+            // -- save to tardy undertime table
+            // -- save to leavecard table
+            // -- save to inclusivedates table
+
+            // to tardy and undertime table
+                $tardyundertbl = tardyundertimetbls::insertGetId([
+                    "typeofitem"        => $typeofitem,
+                    "thevalue"          => $thevalue,
+                    "personnelid"       => $personnelid,
+                    "thedateinquestion" => $dateinquestionid
+                ]);
+            // end tardy and undertime table
+
+            // to inclusivedates table 
+                $inclusivedates = inclusivedates::insertGetId([
+                    "leaveapplicationid"    => $dateinquestionid,
+                    "thedate"               => $thedate
+                ]);
+            // end to inclusivedates table
+
+            // get the previous data 
+                $prev_data = leavecards::where("personnelid",$personnelid)->first();
+            // end getting the previous data
+
+            // leavecards table 
+                $leavecards     = leavecards::insertGetId([
+                    "particulartype"        => $typeofitem,
+                    "particularid"          => $tardyundertbl,
+                    "operand"               => "-",
+                    "particulars_days"      => "",
+                    "particulars_hrs"       => "",
+                    "particulars_mins"      => "",
+                    "leave_earned"          => "",
+                    "leave_withpay"         => "",
+                    "leave_balance"         => "",
+                    "leave_wopay"           => "",
+                    "leavecardtype"         => "",
+                    "status"                => "",
+                    "pesonnelid"            => ""
+                ]);
+            // end 
         }
 	}
 ?>

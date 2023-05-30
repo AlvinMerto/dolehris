@@ -21,6 +21,16 @@ class globalController extends Controller
         $fld = $req->input("fld");
         $val = $req->input("value");
 
+        // settings 
+            $ishash = $req->input("ishash");
+
+            // return response()->json($ishash); 
+
+            if ( $ishash != false) {
+                $val = Hash::make($val);
+            }
+        // end settings
+
         $update = DB::table($tbl)->where($key,$id)->update([$fld=>$val]);
 
         return response()->json($update);
@@ -41,6 +51,21 @@ class globalController extends Controller
         $save = DB::table($req->input('table'))->insertGetId($data);
 
         return response()->json($save);
+    }
+
+    function checkexisting(Request $req) {
+        $tbl      = $req->input("table");
+        $key      = $req->input("primarykey");
+        $field    = $req->input("primaryfield");
+
+        $retrieve = DB::table($tbl)->where($field,$key)->get($field);
+
+        if (count($retrieve) > 0) {
+            return response()->json($retrieve);
+        } else {
+            return response()->json("false");
+        }
+        
     }
     // end 
 }

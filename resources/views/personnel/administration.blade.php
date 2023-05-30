@@ -8,7 +8,7 @@
         <!-- <h5 class='mg-b-20'> Employee Management  </h5> -->
             <div class='row add-shadow'> <!-- start row -->
                 <div class='col-md-3 gray-it pd-0'>
-                    <div class='pd-10'>
+                    <div class='pd-10 pd-l-15 pd-r-15'>
                         <div class='flex space-between pd-b-10 mg-b-10 border-bottom'>
                             <!-- <button class='btn btn-default'> Add New </button>  -->
                             <a href="{{route('personneladministration')}}/new" class='btn btn-default' style='background: #e8e8e8;'> Add New </a>

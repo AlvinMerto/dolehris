@@ -15,7 +15,7 @@ class leavecards extends Model
         "particulartype","particularid","operand",
         "particulars_days","particulars_hrs","particulars_mins",
         "leave_earned","leave_withpay","leave_balance",
-        "leave_wopay","leavecardtype","status","created_at","updated_at"
+        "leave_wopay","leavecardtype","status","personnelid","created_at","updated_at"
     ];
 
 }

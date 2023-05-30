@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+use App\Models\usersettings;
+
 class LoginRequest extends FormRequest
 {
     /**
@@ -47,6 +49,13 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
+        }
+
+        $usersettings = usersettings::where("userid",Auth::id())->get();
+
+        session(["userid" => Auth::id()]);
+        foreach($usersettings as $us) {
+            session([$us->thenav => 'true']);
         }
 
         RateLimiter::clear($this->throttleKey());

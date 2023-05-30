@@ -13,34 +13,37 @@
         <?php
           $path_info = $_SERVER["REQUEST_URI"];
           $firstpath = explode("/",$path_info)[1];
+
         ?>
         
-        <div class='withnavigation'>
-          <a href="" style='color: #535353;'>
-            <div class="navicon-left w-auto navtopbtn">
-              <i class="fa fa-briefcase dsitxt" aria-hidden="true"></i> &nbsp; HR Tools
-            </div>
-          </a>
-          <ul class='hrnav'>
-            <li> Applicant Administration </li>
-            <li> Attendance <i class="fa fa-angle-right" aria-hidden="true"></i> &nbsp;
-                 <ul>
-                    <li> <a href="{{url('attendance/upload')}}"/> Upload Attendance </a> </li>
-                    <li> <a href="{{url('attendance/generate')}}"/> Generate DTR </a> </li>
-                 </ul>
-            </li>
-            <li> Holiday Administration </li>
-            <li> Leave Administration </li>
-            <li> Learning and Development </li>
-            <li> Offices </li>
-            <li> Summary Reports </li>
-            <li> Payroll </li>
-            <li> PDS Adminstration </li>
-            <li> <a href="{{ route('personneladministration') }}"> Personnel Records </a> </li>
-            <li> <a href="{{ route('signatories') }}"/> Signatories </a> </li>
-            <!-- <li> <a href="{{ route('sendpayslip') }}"/>Send Payslip </a> </li> -->
-          </ul>
-        </div>
+        <?php if (session('hrnav') == "true" ) { ?>
+          <div class='withnavigation' id='hrnavigation'>
+            <a href="" style='color: #535353;'>
+              <div class="navicon-left w-auto navtopbtn">
+                <i class="fa fa-briefcase dsitxt" aria-hidden="true"></i> &nbsp; HR Tools
+              </div>
+            </a>
+            <ul class='hrnav'>
+              <li> Applicant Administration </li>
+              <li> Attendance <i class="fa fa-angle-right" aria-hidden="true"></i> &nbsp;
+                   <ul>
+                      <li> <a href="{{url('attendance/upload')}}"/> Upload Attendance </a> </li>
+                      <li> <a href="{{url('attendance/generate')}}"/> Generate DTR </a> </li>
+                   </ul>
+              </li>
+              <li> Holiday Administration </li>
+              <li> Leave Administration </li>
+              <li> Learning and Development </li>
+              <li> Offices </li>
+              <li> Summary Reports </li>
+              <li> Payroll </li>
+              <li> PDS Adminstration </li>
+              <li> <a href="{{ route('personneladministration') }}"> Personnel Records </a> </li>
+              <li> <a href="{{ route('signatories') }}"/> Signatories </a> </li>
+              <!-- <li> <a href="{{ route('sendpayslip') }}"/>Send Payslip </a> </li> -->
+            </ul>
+          </div>
+        <?php } ?>
         <!-- 
 
                     Employee Information

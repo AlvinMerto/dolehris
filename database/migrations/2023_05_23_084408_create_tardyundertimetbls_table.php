@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("typeofitem");
             $table->string("thevalue");
             $table->string("personnelid");
-            $table->date("thedateinquestion");
+            $table->string("thedateinquestion");
             $table->timestamps();
         });
     }

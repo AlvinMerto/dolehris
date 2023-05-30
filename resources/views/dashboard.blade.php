@@ -7,7 +7,7 @@
     					<div class='small-profile-div'>
     						<img src="{{ asset('/upload/DSC_5694.png') }}"/>
     					</div>
-    					<h5 class='mg-b-5 mg-t-15'> Alvin Merto </h5>
+    					<h5 class='mg-b-5 mg-t-15'> <?php echo $data[0]->fname." ".$data[0]->mname." ".$data[0]->lname; ?> </h5>
     					<p class='mg-0'> TUPAD Coordinator - TSSD </p>
     				</div>
     				<div class='details-div'>

@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('validationcodes', function (Blueprint $table) {
-            $table->increments("validcode");
-            $table->string("typeofdocument");
-            $table->string("thecode");
-            $table->integer("personnelid");
-            $table->string("detailsid");
+        Schema::create('details', function (Blueprint $table) {
+            $table->increments("detailspk");
+            $table->string("groupid");
+            $table->string("thefield");
+            $table->string("thevalue");
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('validationcodes');
+        Schema::dropIfExists('details');
     }
 };

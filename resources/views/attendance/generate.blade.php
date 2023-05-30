@@ -2,7 +2,7 @@
     
         <!-- <div class='br-pagebody'> -->
             <div class="pd-t-30 pd-l-30 pd-r-30 pd-b-10">
-                <h4 class="tx-gray-800 mg-b-5">Generate Daily Time Records <a href="{{ url('attendance/upload') }}" class='btn btn-info'> Upload Attendance </a> </h4>
+                <h6 class="tx-gray-800 mg-b-5">Generate Daily Time Records <a href="{{ url('attendance/upload') }}" class='btn btn-info'> Upload Attendance </a> </h6>
                 <!-- <p class="mg-b-0">Generate time records to all area offices</p> -->
             </div>
             <div class="br-pagebody mg-t-5 pd-x-30"> 
@@ -57,7 +57,7 @@
                                 </div>
 
                                 <table id='employee_table' class='table table-striped'>
-                                    <thead>
+                                    <thead style="background: #e1e1e1;">
                                         <tr>
                                             <th style='width:30px; padding: 10px 12px;'> <input type='checkbox' id='checkallcheckboxes'/> </th>
                                             <th> Name </th>
@@ -71,7 +71,7 @@
                                             <td> </td>
                                         </tr>
                                     </tbody>
-                                    <tfoot>
+                                    <tfoot style="background: #e1e1e1;">
                                         <tr>
                                             <th style='width:30px; padding: 10px 12px;'> <input type='checkbox' id='checkallcheckboxes'/> </th>
                                             <th> Name </th>

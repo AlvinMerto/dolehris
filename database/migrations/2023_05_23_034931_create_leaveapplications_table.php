@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('leaveapplications', function (Blueprint $table) {
             $table->increments("leaveapplicationpk");
             $table->integer("leavetypeid");
+            $table->string("thedateinquestion");
             $table->integer("numberofdays");
             $table->integer("personnelid");
             $table->integer("commutationid")->nullable();

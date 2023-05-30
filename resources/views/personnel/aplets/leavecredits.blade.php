@@ -13,6 +13,7 @@
                             <button class='btn btn-primary'> COC </button>
                             <button class='btn btn-primary'> Forced Leave </button>
                             <button class='btn btn-primary'> Special Leave </button>
+                            <button class='btn btn-primary'> Add Leave </button>
                         </th>
                     </tr>
                     <tr>

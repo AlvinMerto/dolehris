@@ -9,7 +9,7 @@ class personnel {
             //thechosenid = gettheurlparameter(5, window.location.href);
 
             if ( profiledisplay ) {
-                $(document).find("#theprofileinput").html("loading");
+                $(document).find("#theprofileinput").html("<p class='theloading'> Loading </p> ");
 
                 thechosenid = dp.gettheurlparameter(5, window.location.href);
                 person.thenavigation("profile");
@@ -28,6 +28,8 @@ class personnel {
                 details.email    = $(document).find("#emailaddr").val();
                 details.password = $(document).find("#password").val();
 
+            var theuserid        = $(document).find("#theuserid").val();
+
             var conf_pwd         = $(document).find("#confirm_password").val();
                 
                 if (details.password != conf_pwd) {
@@ -35,7 +37,26 @@ class personnel {
                     return;
                 }
 
-            dp.savethis("users", details, "password");
+            //dp.checkexisting(users, "userid", theuserid , function(data){
+
+                //if (data == false || data == "false") {
+                    dp.savethis("users", details, "password", function(userid) {
+                        let dets            = new Object();
+                            dets.userid     = userid;
+                            dets.thenav     = $(document).find("#therole").val();
+
+                        dp.savethis("usersettings", dets, null , function(data){
+                            alert("User is saved");
+                        });
+
+                        // update the user_id field
+                            dp.savefunction("perid", "personnels", thechosenid, "user_id", userid, function(data){
+                                alert("Personnel updated");
+                            }, null);
+                        // end 
+                    });
+                //}
+            // });
         });
     }
 
@@ -52,7 +73,7 @@ class personnel {
             }, error : function(){
                 alert('error displaying data')
             }
-        })
+        });
     }
     
 }

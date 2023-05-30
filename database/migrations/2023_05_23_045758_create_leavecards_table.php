@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('leavecards', function (Blueprint $table) {
             $table->increments("leavecardpk");
-            $table->integer("particulartype");
+            $table->string("particulartype");
             $table->integer("particularid");
             $table->string("operand");
             $table->string("particulars_days");

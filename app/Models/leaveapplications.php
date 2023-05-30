@@ -12,8 +12,8 @@ class leaveapplications extends Model
     protected $table      = "leaveapplications";
     protected $primaryKey = "leaveapplicationpk";
     protected $fillable   = [
-                "leavetypeid","numberofdays",
-                "personnelid","commutationid",
+                "leavetypeid","thedateinquestion",
+                "numberofdays","personnelid","commutationid",
                 "monetizationid","created_at","updated_at"
             ];
 

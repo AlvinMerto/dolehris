@@ -94,6 +94,7 @@ class generateDtr {
 
         if (id_move == personnel_ids.length) {
             alert("All DTRs are sent");
+            personnel_ids = [];
             return;
         }
         

@@ -11,29 +11,36 @@ use App\Models\offices;
 use App\Models\divisions;
 
 use App\Models\employment_types;
+use App\Models\usersettings;
+use App\Models\User;
+
+use App\Process\DoleProcess;
 
 use DB;
+use Auth; 
 class PersonnelController extends Controller
 {
     //
-    private $theid = false;
+    public function __construct() {
+        
+    }
 
     public function administration($id = false) {
-        $employees = personnel::all();
-        $positions = positions::all();
+
+        DoleProcess::checksettings("hrnav");
+
+        $employees  = personnel::all();
+        $positions  = positions::all();
 
         // get areas, offices, divisions
-        $areas     = area_offices::all();
-        $offices   = offices::all();
-        $divisions = divisions::all(); 
+        $areas      = area_offices::all();
+        $offices    = offices::all();
+        $divisions  = divisions::all(); 
 
         // employment status
         $emp_status = employment_types::all();
 
-        $selected  = [];
-        // if ($id != false) {
-        //     $selected = personnel::where("perid",$id)->get();
-        // }
+        $selected   = [];
 
         $displaytabs = null; 
 
@@ -62,22 +69,25 @@ class PersonnelController extends Controller
     }
 
     public function profile(Request $req) {
-        $selected  = personnel::where("perid",$req->input("thechosenid"))->get();
+        $selected    = personnel::where("perid",$req->input("thechosenid"))->get();
 
-        $positions = positions::where("status",$selected[0]->employment_type_id)->get();
+        $positions   = positions::where("status",$selected[0]->employment_type_id)->get();
 
         // get areas, offices, divisions
-        $areas     = area_offices::all();
-        $offices   = offices::all();
-        $divisions = divisions::all(); 
+        $areas       = area_offices::all();
+        $offices     = offices::all();
+        $divisions   = divisions::all(); 
 
         // employment status
-        $emp_status = employment_types::all();
+        $emp_status  = employment_types::all();
 
         // signatories 
         $signatories = [];
 
-        return view("personnel.aplets.profile", compact("selected","positions","areas","offices","divisions","emp_status"));
+        $users        = User::where("id",$selected[0]->user_id)->get();
+        $usersettings = usersettings::where("userid",$selected[0]->user_id)->get();
+
+        return view("personnel.aplets.profile", compact("selected","positions","areas","offices","divisions","emp_status","usersettings","users"));
     }
 
     public function leavecredits(Request $req) {

@@ -98,7 +98,14 @@ class generateDtr extends Controller
         $schedule["afternoon_flexi_out"] = $skeds[3]['thetime']; //"18:00:00";
 
         $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule);
-        $validcode   = DoleProcess::savevalidation("DTR",$empdata[0]->perid);
+
+        $dets = [
+                "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
+                "Full Name"       => $name,
+                "system verified" => "success"
+        ];
+
+        $validcode   = DoleProcess::savevalidation("DTR",$empdata[0]->perid, $dets);
 
         $data        = [
                         "timeanddate"   => $thedtr,
@@ -176,7 +183,7 @@ class generateDtr extends Controller
         $html                   = "";
         $name                   = null;
 
-        $skeds       = Schedules::where(["areaid"=>$areaid,"groupid"=>"1"])->orderBy("theorder","asc")->get(["timeexact","thetime"])->toArray();
+        $skeds                  = Schedules::where(["areaid"=>$areaid,"groupid"=>"1"])->orderBy("theorder","asc")->get(["timeexact","thetime"])->toArray();
 
         $schedule["morning_flexi_in"]    = $skeds[0]['thetime']; //"9:00:00";
         $schedule["morning_flexi_out"]   = $skeds[1]['thetime']; //"12:00:00";
@@ -189,7 +196,14 @@ class generateDtr extends Controller
 
             $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
             $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule);
-            $validcode   = DoleProcess::savevalidation("DTR",$empdata[0]->perid);
+
+            $dets = [
+                "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
+                "Full Name"       => $name,
+                "system verified" => "success"
+            ];
+
+            $validcode   = DoleProcess::savevalidation("DTR",$empdata[0]->perid, $dets);
 
             $data        = [
                         "timeanddate"   => $thedtr,
@@ -227,7 +241,7 @@ class generateDtr extends Controller
                                 ->join("positions","personnels.position_id","=","positions.positionpk")
                                 ->where("area_offices.areaofficepk",$req->input("areaid"))
                                 ->get(["personnels.fname","personnels.mname","personnels.lname","positions.theposition"]);
-                                
+
         return response()->json(["name"=>trim($signatory[0]->fname)." ".trim($signatory[0]->mname)."".trim($signatory[0]->lname),"position"=>$signatory[0]->theposition]);
     }
 }

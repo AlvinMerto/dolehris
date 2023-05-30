@@ -50,16 +50,20 @@ class TimeAttendancesController extends Controller
 
             $timeactual = null;
             if ($cstatus == "c/in") {
-                if ( date("H", strtotime($thetime)) < 12 ) {
+                if ( date("H", strtotime($thetime)) < 12 ) { // 
                     $timeactual = "am_start";
-                } else if ( date("H", strtotime($thetime)) == 12) {
+                } else if ( date("H", strtotime($thetime)) == 12 ) {
+                    $timeactual = "pm_start";
+                } else if ( date("H", strtotime($thetime)) > 12 ) {
                     $timeactual = "pm_start";
                 }
             } else if ($cstatus == "c/out") {
-                if ( date("H", strtotime($thetime))  == 12 ) {
+                if ( date("H", strtotime($thetime))  == 12 ) {  // for out on 12
                     $timeactual = "am_end";
-                } else if ( date("H", strtotime($thetime)) > 12 ) {
+                } else if ( date("H", strtotime($thetime)) > 12 ) { // for early out in the afternoon
                     $timeactual = "pm_end";
+                } else if ( date("H", strtotime($thetime)) < 12 ) { // for early out in the morning
+                    $timeactual = "am_end";
                 }
             }
 
