@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inclusivedates', function (Blueprint $table) {
             $table->increments("inclusivedatespk");
-            $table->integer("leaveapplicationid");
+            $table->string("leaveapplicationid");
             $table->date("thedate");
             $table->timestamps();
         });

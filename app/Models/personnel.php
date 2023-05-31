@@ -17,4 +17,6 @@ class personnel extends Model
                                 ,"email","office_id","division_id"
                                 ,"area_office_id","position_id","status"
                                 ,"created_at","updated_at"];
+
+
 }

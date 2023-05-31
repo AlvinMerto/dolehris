@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('area_offices', function (Blueprint $table) {
             $table->increments("areaofficepk");
             $table->string("theareaoffice");
+            $table->bigint("thesignatory");
             $table->integer("status");
             $table->timestamps();
         });

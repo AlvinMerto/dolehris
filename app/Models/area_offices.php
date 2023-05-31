@@ -12,6 +12,10 @@ class area_offices extends Model
     protected $table      = "area_offices";
     protected $primaryKey = "areaofficepk";
     protected $fillable   = [
-        "theareaoffice","status","created_at","updated_at"
+        "theareaoffice","thesignatory","status","created_at","updated_at"
     ];
+
+    public function signatory() {
+        return $this->hasMany(personnel::class,"perid","thesignatory");
+    }
 }

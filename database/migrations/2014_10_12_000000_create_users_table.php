@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        Schema::create('usersettings', function (Blueprint $table) {
+            $table->increments("usersettingspk");
+            $table->unsignedInteger("userid")->unique();
+            $table->string("thenav");
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -19,7 +27,12 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign("userid")
+                  ->references("id")
+                  ->on("users")
+                  ->onDelete('cascade');
         });
+
     }
 
     /**

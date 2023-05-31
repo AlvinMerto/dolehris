@@ -97,7 +97,7 @@ class generateDtr extends Controller
         $schedule["afternoon_flexi_in"]  = $skeds[2]['thetime']; //"13:00:00";
         $schedule["afternoon_flexi_out"] = $skeds[3]['thetime']; //"18:00:00";
 
-        $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule);
+        $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
 
         $dets = [
                 "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
@@ -195,7 +195,7 @@ class generateDtr extends Controller
             $empdata         = personnel::where("biometricid",$id)->get();
 
             $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
-            $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule);
+            $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
 
             $dets = [
                 "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),

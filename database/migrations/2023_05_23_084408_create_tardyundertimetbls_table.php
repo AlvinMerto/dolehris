@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tardyundertimetbls', function (Blueprint $table) {
             $table->increments("tardyundertimepk");
             $table->string("typeofitem");
-            $table->string("thevalue");
+            $table->string("thevalue")->nullable();
             $table->string("personnelid");
             $table->string("thedateinquestion");
             $table->timestamps();

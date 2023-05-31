@@ -68,8 +68,9 @@ Route::middleware("auth")->group(function(){
 
     // personnel administration 
     Route::get("/personnel/administration/{id?}", [PersonnelController::class,"administration"])->name("personneladministration");
-    Route::get("/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
-    Route::post("/personnel/upload",[PersonnelController::class,"uploademployees"])->name("uploademployees");
+    Route::match(array('GET', 'POST'),"/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
+    //Route::get("/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
+    //Route::post("/personnel/upload",[PersonnelController::class,"uploademployees"])->name("uploademployees");
     Route::get("/personnel/service-record/{id?}", [PersonnelController::class,"servicerecord"])->name("servicerecord");
     Route::get("/personnel/personnel-directory/{id?}",[PersonnelController::class,"personneldirectory"])->name("personneldirectory");
     Route::get("/personnel/reporting-analytics/{id?}",[PersonnelController::class,"reportinganalytics"])->name("reportinganalytics");
@@ -127,6 +128,11 @@ Route::middleware("auth")->group(function(){
         echo "Displaying applicants";
     });
 // end applicants page
+
+
+Route::get("/testsig", function(){ 
+    
+});
 
 
 require __DIR__.'/auth.php';

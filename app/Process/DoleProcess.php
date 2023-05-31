@@ -12,7 +12,7 @@
 	use DateTime;
 
 	class DoleProcess {
-		public static function compute_tardy_undertime($datetime, $periodfrom, $periodto, $schedule ) {
+		public static function compute_tardy_undertime($datetime, $periodfrom, $periodto, $schedule , $personnelid = false ) {
 			$period = new \DatePeriod(
                      new \DateTime($periodfrom),
                      new \DateInterval('P1D'),
@@ -201,6 +201,15 @@
                     $thedtr[date("m/d/Y", strtotime($thedate))]['undertime']	  = $under;
                     $thedtr['tardy_count']    = $tardy_count;
                     $thedtr['under_count']    = $under_count; 
+
+                    if ($tardy != null) {
+                        DoleProcess::savetardyundertime($personnelid, "t" , $tardy, $thedate);
+                    }
+                    
+                    if ($under != null) {
+                        DoleProcess::savetardyundertime($personnelid, "u" , $under, $thedate);
+                    }
+                    
 				} // end of for loop
 
                 // undertime breakdown to hour and mins
@@ -234,27 +243,46 @@
             // $mins_days  = ($mins/480);  // in days
 
             $hrs_in_days = [
+                "0"  => "0.000",
                 "00" => "0.000",
+                "1" => "0.125",
                 "01" => "0.125",
+                "2" => "0.250",
                 "02" => "0.250",
+                "3" => "0.375",
                 "03" => "0.375",
+                "4" => "0.500",
                 "04" => "0.500",
+                "5" => "0.625",
                 "05" => "0.625",
+                "6" => "0.750",
                 "06" => "0.750",
+                "7" => "0.875",
                 "07" => "0.875",
+                "8" => "1.000",
                 "08" => "1.000"
             ];
 
             $mins_in_days = [
+                "0"  => "0.000",
                 "00" => "0.000",
+                "1" => "0.002",
                 "01" => "0.002",
+                "2" => "0.004",
                 "02" => "0.004",
+                "3" => "0.006",
                 "03" => "0.006",
+                "4" => "0.008",
                 "04" => "0.008",
+                "5" => "0.010",
                 "05" => "0.010",
+                "6" => "0.012",
                 "06" => "0.012",
+                "7" => "0.015",
                 "07" => "0.015",
+                "8" => "0.017",
                 "08" => "0.017",
+                "9" => "0.019",
                 "09" => "0.019",
                 "10" => "0.021",
                 "11" => "0.023",
@@ -317,6 +345,8 @@
             // added all to minutes
             $hrstomins     = $hour*60;     // in minutes
 
+            // index 0 returns days
+            // index 1 returns minutes
             return [$hrs_days+$mins_days,$hrstomins+$mins];
         }
 
@@ -369,6 +399,12 @@
             // -- save to leavecard table
             // -- save to inclusivedates table
 
+            $checkexistence = tardyundertimetbls::where("thedateinquestion",$dateinquestionid)->get(["thedateinquestion"]);
+
+            if (count($checkexistence) > 0) {
+                return;
+            }
+
             // to tardy and undertime table
                 $tardyundertbl = tardyundertimetbls::insertGetId([
                     "typeofitem"        => $typeofitem,
@@ -381,29 +417,69 @@
             // to inclusivedates table 
                 $inclusivedates = inclusivedates::insertGetId([
                     "leaveapplicationid"    => $dateinquestionid,
-                    "thedate"               => $thedate
+                    "thedate"               => date("Y-m-d", strtotime($thedate))
                 ]);
             // end to inclusivedates table
 
             // get the previous data 
-                $prev_data = leavecards::where("personnelid",$personnelid)->first();
+                $prev_data = leavecards::where(["personnelid"=>$personnelid,"leavecardtype"=>1])
+                                        ->orWhere("leavecardtype","fb")
+                                        ->orderBy("leavecardpk","DESC")
+                                        ->first();
+
+                if ($prev_data != NULL) {
+                    $prev_data = $prev_data->toArray();
+                }
             // end getting the previous data
+
+            // breakdown for the leave cards table 
+                $theexploded  = explode(":", $thevalue);
+       
+                if (count($theexploded) > 1) {
+                    $part_hrs     = $theexploded[0];
+                    $part_mins    = $theexploded[1]; 
+                } else {
+                    $part_hrs     = 0;
+                    $part_mins    = 0;
+                }
+               
+                $leavebalance = 0;
+                $leavewithpay = null;
+                $leavewopay   = null;
+
+                $indays = DoleProcess::convert_to_days($part_hrs, $part_mins)[0];
+
+                if ($prev_data != null) {
+                    if (count($prev_data) > 0) {
+                        $prev_leavebalance = $prev_data['leave_balance'];
+
+                        if ($prev_leavebalance > 0) {
+                            $leavewithpay = $indays;
+                            $leavebalance = $prev_leavebalance-$leavewithpay;
+                        } else {
+                            $leavewopay   = $indays;
+                            $leavebalance = 0-$leavewopay;
+                        }
+                    }
+                 }
+
+            // end breakdown
 
             // leavecards table 
                 $leavecards     = leavecards::insertGetId([
                     "particulartype"        => $typeofitem,
                     "particularid"          => $tardyundertbl,
                     "operand"               => "-",
-                    "particulars_days"      => "",
-                    "particulars_hrs"       => "",
-                    "particulars_mins"      => "",
-                    "leave_earned"          => "",
-                    "leave_withpay"         => "",
-                    "leave_balance"         => "",
-                    "leave_wopay"           => "",
-                    "leavecardtype"         => "",
-                    "status"                => "",
-                    "pesonnelid"            => ""
+                    "particulars_days"      => NULL,
+                    "particulars_hrs"       => $part_hrs,
+                    "particulars_mins"      => $part_mins,
+                    "leave_earned"          => NULL,
+                    "leave_withpay"         => $leavewithpay,
+                    "leave_balance"         => $leavebalance,
+                    "leave_wopay"           => $leavewopay,
+                    "leavecardtype"         => "1",
+                    "status"                => "1",
+                    "personnelid"            => $personnelid
                 ]);
             // end 
         }

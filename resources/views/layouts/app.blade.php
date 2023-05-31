@@ -111,6 +111,7 @@
         <script src="{{asset('dolejs/generatedtr.procs.js')}}"></script>
         <script src="{{asset('dolejs/personnel.procs.js')}}"></script>
         <script src="{{asset('dolejs/leavecalendar.procs.js')}}"></script>
+        <script src="{{asset('dolejs/leavecredits.procs.js')}}"></script>
         
         <!-- <script src="{{asset('js/ResizeSensor.js')}}"></script>
         <script src="{{asset('js/dashboard.js')}}"></script> -->
