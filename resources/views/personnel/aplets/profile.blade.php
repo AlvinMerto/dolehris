@@ -100,57 +100,7 @@
                                                     </select>
                                                 </div>  
 
-                                                 <?php if (count($usersettings) > 0) { ?>
-                                                <div class='smalldiv mg-b-20'>
-                                                    <small> ROLE </small>
-                                                    <select class='form-control mg-t-10 thetextinput'
-                                                                data-key='usersettingspk' 
-                                                                data-tbl='usersettings' 
-                                                                data-index="<?php if(count($usersettings) > 0) { echo $usersettings[0]->usersettingspk; } ?>" 
-                                                                data-fld = "thenav">
-                                                        <option value='adminnav' <?php echo ($usersettings[0]->thenav == "1")?"selected":null; ?>> Administrator </option>
-                                                        <option value='hrnav' <?php echo ($usersettings[0]->thenav == "2")?"selected":null; ?>> HR Personnel </option>
-                                                        <option value='officeheadnav' <?php echo ($usersettings[0]->thenav == "3")?"selected":null; ?>> Office Head </option>
-                                                        <option value='divisionheadnav' <?php echo ($usersettings[0]->thenav == "4")?"selected":null; ?>> Division Head </option>
-                                                        <option value='employeenav' <?php echo ($usersettings[0]->thenav == "5")?"selected":null; ?>> Employee </option>
-                                                    </select>
-                                                 </div> 
-
-                                                <div class='smalldiv mg-b-20'>
-                                                        <small> PASSWORD </small>
-                                                        <input type='password' class='form-control mg-t-10 thetextinput' id='password' name="password"
-                                                                data-key='id' 
-                                                                data-tbl='users' 
-                                                                data-hash = "yes"
-                                                                data-confirm = "yes"
-                                                                data-index="<?php if(count($users) > 0) { echo $users[0]->id; } ?>" 
-                                                                data-fld = "password"
-                                                        />
-                                                </div>
-                                                <?php } else { ?>
-                                                    <div class='smalldiv mg-b-20'>
-                                                        <select class='form-control mg-t-10' id='therole'>
-                                                            <option value='adminnav'> Administrator </option>
-                                                            <option value='hrnav'> HR Personnel </option>
-                                                            <option value='officeheadnav'> Office Head </option>
-                                                            <option value='divisionheadnav'> Division Head </option>
-                                                            <option value='employeenav'> Employee </option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class='smalldiv mg-b-20'>
-                                                        <small> PASSWORD </small>
-                                                        <input type='password' class='form-control mg-t-10' id='password' name="password"/>
-                                                    </div>
-                                                    <div class='smalldiv mg-b-20'>
-                                                        <small> CONFIRM PASSWORD </small>
-                                                        <input type='password' class='form-control mg-t-10' id='confirm_password' name="confirm_password"/>
-                                                    </div>
-                                                    <div class='smalldiv mg-b-20'>
-                                                        <!-- <small> PASSWORD </small> <br/> -->
-                                                        <input type='submit' value='Save Account' id='saveaccount' class='btn btn-default'/>
-                                                    </div>
-                                                <?php } ?>
+                                                
                                                 <!-- <div class='smalldiv mg-b-20'>
                                                     <small> OFFICE </small>
                                                     <select class='form-control mg-t-10 thetextinput' data-key='perid' data-tbl='personnels' data-index="<?php //if(count($selected) > 0) { echo $selected[0]->perid; } ?>" data-fld = "office_id">
@@ -211,9 +161,57 @@
                                     </div> <!-- end second profile div -->
                                     <div class='child-profile-div mg-l-20'> <!-- third child profile div -->
                                         <div class='top-div-box'> <!-- top div box -->
-                                            
+                                            <?php if (count($usersettings) > 0) { ?>
+                                                <div class='smalldiv mg-b-20'>
+                                                    <small> ROLE </small>
+                                                    <select class='form-control mg-t-10 thetextinput'
+                                                                data-key='usersettingspk' 
+                                                                data-tbl='usersettings' 
+                                                                data-index="<?php if(count($usersettings) > 0) { echo $usersettings[0]->usersettingspk; } ?>" 
+                                                                data-fld = "thenav">
+                                                        <option value='adminnav' <?php echo ($usersettings[0]->thenav == "1")?"selected":null; ?>> Administrator </option>
+                                                        <option value='hrnav' <?php echo ($usersettings[0]->thenav == "2")?"selected":null; ?>> HR Personnel </option>
+                                                        <option value='officeheadnav' <?php echo ($usersettings[0]->thenav == "3")?"selected":null; ?>> Office Head </option>
+                                                        <option value='divisionheadnav' <?php echo ($usersettings[0]->thenav == "4")?"selected":null; ?>> Division Head </option>
+                                                        <option value='employeenav' <?php echo ($usersettings[0]->thenav == "5")?"selected":null; ?>> Employee </option>
+                                                    </select>
+                                                 </div> 
 
-
+                                                <div class='smalldiv mg-b-20'>
+                                                        <small> PASSWORD </small>
+                                                        <input type='password' class='form-control mg-t-10 thetextinput' id='password' name="password"
+                                                                data-key='id' 
+                                                                data-tbl='users' 
+                                                                data-hash = "yes"
+                                                                data-confirm = "yes"
+                                                                data-index="<?php if(count($users) > 0) { echo $users[0]->id; } ?>" 
+                                                                data-fld = "password"
+                                                        />
+                                                </div>
+                                                <?php } else { ?>
+                                                    <div class='smalldiv mg-b-20'>
+                                                        <small> ROLE </small>
+                                                        <select class='form-control mg-t-10' id='therole'>
+                                                            <option value='adminnav'> Administrator </option>
+                                                            <option value='hrnav'> HR Personnel </option>
+                                                            <option value='officeheadnav'> Office Head </option>
+                                                            <option value='divisionheadnav'> Division Head </option>
+                                                            <option value='employeenav'> Employee </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class='smalldiv mg-b-20'>
+                                                        <small> PASSWORD </small>
+                                                        <input type='password' class='form-control mg-t-10' id='password' name="password"/>
+                                                    </div>
+                                                    <div class='smalldiv mg-b-20'>
+                                                        <small> CONFIRM PASSWORD </small>
+                                                        <input type='password' class='form-control mg-t-10' id='confirm_password' name="confirm_password"/>
+                                                    </div>
+                                                    <div class='smalldiv mg-b-20'>
+                                                        <!-- <small> PASSWORD </small> <br/> -->
+                                                        <input type='submit' value='Save Account' id='saveaccount' class='btn btn-default'/>
+                                                    </div>
+                                                <?php } ?>
                                         </div> <!-- end top div box -->
                                         <div>
                                             &nbsp;

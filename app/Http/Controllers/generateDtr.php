@@ -87,7 +87,7 @@ class generateDtr extends Controller
         $timeanddate = time_attendances::where("biometricid",$bioid)->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])->get();
         $empdata     = personnel::where("biometricid",$bioid)->get();
 
-        $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
+        $name        = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
         // $position    = $empdata[0]->
 
         $skeds       = Schedules::where(["areaid"=>$empdata[0]->area_office_id,"groupid"=>"1"])->orderBy("theorder","asc")->get(["timeexact","thetime"])->toArray();
@@ -129,7 +129,8 @@ class generateDtr extends Controller
         $pdf = PDF::loadView('pdf.dtr', $data);
         $pdf->setOption(['defaultFont' => 'sans-serif', 'isRemoteEnabled' => true]);
         
-        $pdf->set_paper("legal");
+        $pdf->set_paper('8.5x13', 'portrait');
+        // $pdf->set_paper("legal");
         // $pdf->set_paper("A4");
         
         if ( strlen($d["email"]) == 0 ) {
@@ -194,7 +195,8 @@ class generateDtr extends Controller
             $timeanddate     = time_attendances::where("biometricid",$id)->get();
             $empdata         = personnel::where("biometricid",$id)->get();
 
-            $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
+            // $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
+            $name        = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
             $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
 
             $dets = [
@@ -224,8 +226,12 @@ class generateDtr extends Controller
         }
 
         $pdf        = PDF::loadHTML($html);
+
+        //$customPaper = array(0,0,567.00,283.80);
+        
         $pdf->setOption(['defaultFont' => 'sans-serif', 'isRemoteEnabled' => true]);
-        $pdf->set_paper("legal");
+        // $pdf->set_paper("legal");
+        $pdf->set_paper('8.5x13', 'portrait');
 
         if (count($theids) == 1) {
             $filename     .= " for ".$name;

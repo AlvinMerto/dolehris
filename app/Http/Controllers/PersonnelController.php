@@ -90,11 +90,7 @@ class PersonnelController extends Controller
         return view("personnel.aplets.profile", compact("selected","positions","areas","offices","divisions","emp_status","usersettings","users"));
     }
 
-    public function leavecredits(Request $req) {
-        $selected  = personnel::where("perid",$req->input("thechosenid"))->get();
 
-        return view("personnel.aplets.leavecredits", compact("selected"));
-    }
 
     public function uploademployees(Request $req) {
 

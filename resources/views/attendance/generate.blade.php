@@ -2,7 +2,8 @@
     
         <!-- <div class='br-pagebody'> -->
             <div class="pd-t-30 pd-l-30 pd-r-30 pd-b-10">
-                <h6 class="tx-gray-800 mg-b-5">Generate Daily Time Records <a href="{{ url('attendance/upload') }}" class='btn btn-info'> Upload Attendance </a> </h6>
+                <h6 class="tx-gray-800 mg-b-5">Generate Daily Time Records 
+                    <a href="{{ url('attendance/upload') }}" class='btn uploadattbtn' > Upload Attendance </a> </h6>
                 <!-- <p class="mg-b-0">Generate time records to all area offices</p> -->
             </div>
             <div class="br-pagebody mg-t-5 pd-x-30"> 

@@ -77,15 +77,53 @@
 
                     if ( strtolower(date("l", strtotime($thedate))) != "saturday" && strtolower(date("l", strtotime($thedate))) != "sunday" ) {
                         // break 1;
-                   
-                        if ($am_start != null && $am_end != null && $pm_start != null && $pm_end != null) {
+                        
+                        $passthrough = true;
+                        // if ($ismonday) {
+                        //     if ($am_start != null) {
+                        //         $passthrough = true;
+                        //     }
+                        // } else {
+                        //     if ($am_start != null && $am_end != null && $pm_start != null && $pm_end != null) {
+                        //         $passthrough = true;
+                        //     }
+                        // }
+
+                        if ($passthrough) {
+                            $pass_tardy_am = false;
+                            $pass_under_am = false;
+                            $pass_tardy_pm = false;
+                            $pass_under_pm = false;
+
+                        // if ($am_start != null && $am_end != null && $pm_start != null && $pm_end != null) {
+
+                            if ($am_start != null) {
+                                $pass_tardy_am = true;
+                            }
+
+                            if ($am_end != null) {
+                                $pass_under_am = true;
+                            }
+
+                            if ($pm_start != null) {
+                                $pass_tardy_pm = true;
+                            }
+
                             if ($ismonday) {
                                 $thold_am_in      = "08:00:00";
                                 $thold_am_out     = "12:00:00";
                                 $thold_pm_in      = "13:00:00";
 
-                                if ($am_start < $thold_am_in) {
-                                    $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
+                                if ($pm_end != null) {
+                                    $pass_under_pm = true;
+                                }
+
+                                if ($am_start != null) {
+                                    if ($am_start < $thold_am_in) {
+                                        $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
+                                    } else {
+                                        $supposed_pm_out  = "17:00:00";
+                                    }
                                 } else {
                                     $supposed_pm_out  = "17:00:00";
                                 }
@@ -94,50 +132,62 @@
                                 $thold_am_out     = $schedule['morning_flexi_out'];
                                 $thold_pm_in      = $schedule['afternoon_flexi_in'];
 
-                                if ($am_start > $thold_am_in) {
-                                    $supposed_pm_out  = $schedule['afternoon_flexi_out'];
-                                } else {
-                                    // the threshold for the PM OUT is 9 hours from AM IN :: including the 12NN to 1PM break
-                                    $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
+                                if ($am_start != null && $pm_end != null) {
+                                    $pass_under_pm = true;
                                 }
-                            } 
+
+                                if ($am_start != null) {
+                                    if ($am_start > $thold_am_in) {
+                                        $supposed_pm_out  = $schedule['afternoon_flexi_out'];
+                                    } else {
+                                        // the threshold for the PM OUT is 9 hours from AM IN :: including the 12NN to 1PM break
+                                        $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
+                                    }
+                                } else {
+                                    $supposed_pm_out  = $schedule['afternoon_flexi_out'];
+                                }
+                            }
 
                             // start tardiness
                                     // =====================================
                                     // compute for morning tardiness
-                                    $am_time1 = new DateTime($am_start); 
-                                    $am_time2 = new DateTime($thold_am_in);
-                                    $interval = $am_time1->diff($am_time2);
+                                    if ($pass_tardy_am) {
+                                        $am_time1 = new DateTime($am_start); 
+                                        $am_time2 = new DateTime($thold_am_in);
+                                        $interval = $am_time1->diff($am_time2);
 
-                                    $am_tardy_hour = $interval->format("%h");
-                                    $am_tardy_mins = $interval->format("%i");
+                                        $am_tardy_hour = $interval->format("%h");
+                                        $am_tardy_mins = $interval->format("%i");
 
-                                    if ($am_time1 > $am_time2) {
-                                        // tardy morning
-                                         $tardy = $am_tardy_hour.":".$am_tardy_mins;
-                                        // $tardy  = ($am_tardy_hour*60)+$am_tardy_mins;
-                                        $tardy_count++;
+                                        if ($am_time1 > $am_time2) {
+                                            // tardy morning
+                                             $tardy = $am_tardy_hour.":".$am_tardy_mins;
+                                            // $tardy  = ($am_tardy_hour*60)+$am_tardy_mins;
+                                            $tardy_count++;
+                                        }
                                     }
                                     // end computation of morning tardiness
                                     // =====================================
 
                                     // =====================================
                                     // computation for afternoon tardy
-                                    $pm_time1    = new DateTime($pm_start);
-                                    $pm_time2    = new DateTime($thold_pm_in);
-                                    $interval_pm = $pm_time1->diff($pm_time2);
+                                    if ($pass_tardy_pm) {
+                                        $pm_time1      = new DateTime($pm_start);
+                                        $pm_time2      = new DateTime($thold_pm_in);
+                                        $interval_pm   = $pm_time1->diff($pm_time2);
 
-                                    $pm_tardy_hour = $interval_pm->format("%h");
-                                    $pm_tardy_mins = $interval_pm->format("%i");
+                                        $pm_tardy_hour = $interval_pm->format("%h");
+                                        $pm_tardy_mins = $interval_pm->format("%i");
 
-                                    if ($pm_time1 > $pm_time2) {
-                                        $pm_tardy = $pm_tardy_hour.":".$pm_tardy_mins;
-                                        
-                                        $secs   = strtotime($tardy)-strtotime("00:00:00");
-                                        $result = date("H:i:s",strtotime($pm_tardy)+$secs);
+                                        if ($pm_time1 > $pm_time2) {
+                                            $pm_tardy  = $pm_tardy_hour.":".$pm_tardy_mins;
+                                            
+                                            $secs   = strtotime($tardy)-strtotime("00:00:00");
+                                            $result = date("H:i:s",strtotime($pm_tardy)+$secs);
 
-                                        $tardy  = $result;
-                                        $tardy_count++;
+                                            $tardy  = $result;
+                                            $tardy_count++;
+                                        }
                                     }
                                     // end computation of afternoon tardy
                                     // =====================================
@@ -145,6 +195,7 @@
 
                                 // undertime
                                     // morning undertime
+                                    if ($pass_under_am) {
                                         $am_under_t1       = new DateTime($am_end);
                                         $am_under_t2       = new DateTime($thold_am_out);
                                         $am_interval_under = $am_under_t1->diff($am_under_t2);
@@ -157,9 +208,11 @@
                                             $under    = $am_under_hour.":".$am_under_mins;
                                             $under_count++;
                                         }
+                                    }
                                     // end morning undertime
 
                                     // afternoon undertime 
+                                    if ($pass_under_pm) {
                                         $pm_under_t1       = new DateTime($pm_end);
                                         $pm_under_t2       = new DateTime($supposed_pm_out);
                                         $pm_under_interval = $pm_under_t1->diff($pm_under_t2);
@@ -176,6 +229,7 @@
                                             $under         = $under_result;
                                             $under_count++;
                                         } 
+                                    }
                                     // end afternoon undertime
                                 // undertime 
                         }

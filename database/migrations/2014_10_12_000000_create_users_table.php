@@ -12,27 +12,26 @@ return new class extends Migration
     public function up(): void
     {
 
-        Schema::create('usersettings', function (Blueprint $table) {
-            $table->increments("usersettingspk");
-            $table->unsignedInteger("userid")->unique();
-            $table->string("thenav");
-            $table->timestamps();
-        });
-
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements("id")->unsigned();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        });
+
+        Schema::create('usersettings', function (Blueprint $table) {
+            $table->increments("usersettingspk");
+            $table->bigInteger("userid")->unsigned();
+            $table->string("thenav");
+            $table->timestamps();
             $table->foreign("userid")
                   ->references("id")
                   ->on("users")
                   ->onDelete('cascade');
         });
-
     }
 
     /**

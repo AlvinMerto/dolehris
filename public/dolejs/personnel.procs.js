@@ -12,6 +12,9 @@ class personnel {
                 $(document).find("#theprofileinput").html("<p class='theloading'> Loading </p> ");
 
                 thechosenid = dp.gettheurlparameter(5, window.location.href);
+
+                // let storednav = dp.getCookie("dashboardnavigation");
+
                 person.thenavigation("profile");
                
             }
@@ -19,7 +22,24 @@ class personnel {
         });
 
         $(document).on("click",".tabnav", function(){
-            person.thenavigation( $(this).data("nav") );
+            // let dis       = $(this);
+            let theparent = $(this).data("parent");
+            let thenav    = $(this).data("nav");
+
+            // // selected-nav
+            $(this).siblings().removeClass("selected-nav");
+            $(this).addClass("selected-nav");
+
+            // dp.setCookie("dashboardnavigation", thenav, 365);
+
+            // let storednav = dp.getCookie("dashboardnavigation");
+
+            if (undefined === theparent) {
+                person.thenavigation( thenav , "personnel");    
+            } else {
+                person.thenavigation( thenav , theparent);
+            }
+            
         });
 
         $(document).on("click","#saveaccount", function(){
@@ -32,8 +52,18 @@ class personnel {
 
             var conf_pwd         = $(document).find("#confirm_password").val();
                 
+                if (details.password.length == 0 || conf_pwd.length == 0) {
+                    alert("Please enter password");
+                    return;
+                }
+
                 if (details.password != conf_pwd) {
                     alert("passwords are not equal");
+                    return;
+                }
+
+                if (!dp.checkpasswordstrength(details.password)) {
+                    alert("PASSWORD IS TOO WEAK.\n\nIt must be a combination of Uppercase and lowercase letters, special characters, numbers and must be 8 characters long.");
                     return;
                 }
 
@@ -60,11 +90,11 @@ class personnel {
         });
     }
 
-    thenavigation(thenav) {
+    thenavigation(thenav, tab = "personnel", dis = false) {
         // http://localhost:8000/personnel/administration/2
 
         $.ajax({
-            url      : url+"/personnel/"+thenav,
+            url      : url+"/"+tab+"/"+thenav,
             type     : "GET",
             data     : { thechosenid : thechosenid },
             dataType : "html",

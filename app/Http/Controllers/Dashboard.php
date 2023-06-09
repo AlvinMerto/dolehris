@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\personnel;
 use App\Models\leavecards;
+use App\Models\commutation;
+use App\Models\vacationlocation;
 use App\Models\User;
 
 class Dashboard extends Controller
@@ -31,5 +33,24 @@ class Dashboard extends Controller
         // }
 
         return view("dashboard",compact("data"));
+    }
+
+    function leaveapplications() {
+        $commutation = commutation::get();
+        return view("dashboardcomponents.leaveapplications", compact("commutation"));
+    }
+
+    function vacationleave() {
+        $commutation = commutation::get();
+        $vacationloc = vacationlocation::get();
+        return view("leave.components.vacationleavewindow", compact("commutation","vacationloc"));
+    }
+
+    function sickleave() {
+        return view("leave.components.sickleavewindow");
+    }
+
+    function forcedleave() {
+        return view("leave.components.forcedleave");
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TimeAttendancesController;
 use App\Http\Controllers\generateDtr;
 use App\Http\Controllers\PersonnelController;
+use App\Http\Controllers\LeavecardsController;
 use App\Http\Controllers\globalController;
 use App\Http\Controllers\ValidationcodeController;
 use App\Http\Controllers\Signatories;
@@ -26,8 +27,23 @@ use App\Http\Controllers\Dashboard;
 //     return view('welcome');
 // });
 
-Route::get('/dashboard', [Dashboard::class,"dashboard"])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/', [Dashboard::class,"dashboard"])->middleware(['auth', 'verified'])->name('dashboard');
+//** dashboard and dashboard components 
+// ->middleware(['auth', 'verified'])
+    Route::middleware("auth")->group(function(){  
+         Route::get('/dashboard', [Dashboard::class,"dashboard"])->name('dashboard');
+         Route::get('/', [Dashboard::class,"dashboard"])->name('dashboard');
+
+         // ** for navigation in the dashboard 
+            Route::get("/dashboard/leaveapplications", [Dashboard::class,"leaveapplications"])->name("leaveapplications");
+         // * end 
+
+         // ** leave components 
+            Route::get("/vacationleave", [Dashboard::class,"vacationleave"])->name("vacationleave");
+            Route::get("/sickleave", [Dashboard::class,"sickleave"])->name("sickleave");
+            Route::get("/forcedleave",[Dashboard::class,"forcedleave"])->name('forcedleave');
+         // *
+    });
+// * end dashboard
 
 Route::get('/verify/{qrcode?}', [ValidationcodeController::class,"verify"])->name('verify');
 
@@ -77,7 +93,7 @@ Route::middleware("auth")->group(function(){
 
         // called from ajax :: personnel administration panel
             Route::get("/personnel/profile", [PersonnelController::class,"profile"])->name("theprofile");
-            Route::get("/personnel/leavecredits",[PersonnelController::class,"leavecredits"])->name("leavecredits");
+            Route::get("/personnel/leavecredits",[LeavecardsController::class,"leavecredits"])->name("leavecredits");
         // end 
     // end 
 
@@ -130,8 +146,13 @@ Route::middleware("auth")->group(function(){
 // end applicants page
 
 
-Route::get("/testsig", function(){ 
-    
+Route::get("/testsig", function(){
+    $sets = App\Models\User::get();
+
+    foreach($sets as $s) {
+        echo $s->name;
+        echo $s->settings()->thenav;
+    }
 });
 
 

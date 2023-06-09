@@ -5,6 +5,11 @@
     <title></title>
 
     <style>
+        @page  {
+          margin: 30px 0px 30px 20px;
+          size: legal; 
+        }
+
         * {
             font-size:.777rem;
             
@@ -141,6 +146,10 @@
             padding-top:5px;
             padding-bottom:5px;
         }
+
+        .autofit {
+
+        }
     </style>
 </head>
 <body>
@@ -181,10 +190,10 @@
                
                 <tr class='border-top'> 
                     <td class='bold-it'> DATE  </td>
-                    <td class='bold-it center-it'> IN </td>
-                    <td class='bold-it center-it'> OUT </td>
-                    <td class='bold-it center-it'> IN </td>
-                    <td class='bold-it center-it broken-border-td'> OUT </td>
+                    <td class='bold-it center-it autofit'> IN </td>
+                    <td class='bold-it center-it autofit'> OUT </td>
+                    <td class='bold-it center-it autofit'> IN </td>
+                    <td class='bold-it center-it broken-border-td autofit'> OUT </td>
                     <td class='bold-it center-it border-right border-left border-bottom'> TARDY </td>
                     <td class='bold-it center-it border-right border-left border-bottom'> UNDERTIME </td>
                     <td class='bold-it center-it border-td ' style="width:200px;"> REMARKS </td>
@@ -330,7 +339,7 @@
                     <tr>
                         <td>
                             <div class='mg-t-70'> 
-                                <p class='name-annex center-it'> <?php echo $fullname; ?> </p>
+                                <p class='name-annex center-it'> <?php echo strtoupper($fullname); ?> </p>
                                 <p class='payperiod-annex upperline-p center-it'> Employee Signature </p>
                             </div>    
                         </td>

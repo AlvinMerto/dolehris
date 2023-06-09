@@ -17,7 +17,13 @@ class TimeAttendancesController extends Controller
     //
 
     function uploadtlog(Request $req) {
-        $file 	 	  = $req->file("employeetimelog");        
+        $extension          = $req->file('employeetimelog')->getClientOriginalExtension();
+
+        if ($extension != "dat") {
+            die("Please upload a file with a .dat file format");
+        }
+
+        $file 	 	  = $req->file("employeetimelog");  
         $tfile 		  = fopen($file,"r");
 
         $personalinfo = file($file);

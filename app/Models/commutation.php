@@ -11,6 +11,6 @@ class commutation extends Model
     protected $table        = "commutations";
     protected $primaryKey   = "commutationpk";
     protected $fillable     = [
-            "isrequested","notrequested","created_at","updated_at"
+            "thevalue","created_at","updated_at"
         ];
 }

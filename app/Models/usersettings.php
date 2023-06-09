@@ -15,4 +15,8 @@ class usersettings extends Model
         "userid","thenav","created_at","updated_at"
     ];
 
+
+    public function usets() {
+        return $this->belongsTo(User::class,"id","userid");
+    }
 }

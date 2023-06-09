@@ -90,13 +90,19 @@ class generateDtr {
     }
 
     senddtr(bioid) {
-        $(document).find("#status_"+personnel_ids[id_move]).html("sending DTR... Please wait");
-
         if (id_move == personnel_ids.length) {
             alert("All DTRs are sent");
             personnel_ids = [];
-            return;
+            id_move       = 0;
+            
+            // window.location.reload();
         }
+
+        $(document).find("#status_"+personnel_ids[id_move]).html("sending DTR... Please wait");
+
+        $('html, body').animate({
+            scrollTop: $(document).find("#status_"+personnel_ids[id_move]).offset().top-100
+        },1000);
         
         $.ajax({
             url      : url+"/senddtr",

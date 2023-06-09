@@ -49,13 +49,25 @@ padding: 11px;
 }
 
 #nametbl_filter{
-    width:70%;
+    width: 100%;
+    padding-right: 0px;
+    padding-bottom: 2px;
+}
+
+#nametbl_filter label {
+    width: 100%;
+}
+
+#nametbl_filter label input {
+    width:100%;
+    margin-left: 0px;
 }
 
 .saved-input {
     background: green;
     color: #fff;
     padding: 4px 10px;
+    position:absolute;
 }
 
 .selected-sub-nav {
@@ -236,7 +248,7 @@ border: 1px solid #d9d9d9 !important;
     position: absolute;
     background: #fff;
     box-shadow: 4px 0px 4px #0000004f;
-    right: -149px;
+    right: -105px;
     margin-top: -30px;
     border: 1px solid #ececec;
 }
@@ -318,7 +330,7 @@ border: 1px solid #d9d9d9 !important;
   height: 150px;
   border-radius: 99px;
   overflow: hidden;
-  margin: auto;
+  margin: 20px auto 0px;
   border: 8px solid #fff;
   box-shadow: 0px 0px 10px #686868;
 }
@@ -353,6 +365,124 @@ border: 1px solid #d9d9d9 !important;
     font-size: 24px;
     height: 100%;
     background: #fff;
+}
+
+#calendar {
+    height: 900px;
+    width: 1100px;
+}
+
+.uploadattbtn {
+    margin-left: 75px;
+    background: #dddbdb;
+    border: 1px solid #cfcccc;
+    color: #000;
+}
+
+
+.theapplications {
+
+}
+
+.theitems {
+
+}
+
+.themonthname {
+    width: 45%;
+    margin: 5px 0px 0px 0px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #565657;
+}
+
+.infodiv {
+    margin-left: 30px;
+    border-left: 1px solid #d3d3d3;
+    padding-left: 30px;
+    padding-top:15px;
+}
+
+.item-details-div {
+    margin-bottom: 20px;
+}
+
+.item-details-div p{
+    margin-bottom:0px;
+}
+
+.leavetype {
+    position: relative;
+    font-size: 14px;
+    font-weight: bold;
+    color: #565657;
+}
+
+.leavetype i {
+    position: relative;
+    font-size: 10px;
+    top: -2px;
+    left: -13px;
+    color: #d3d3d3;
+    margin-right: -12px;
+}
+
+.leavetype:before {
+    height: 1px;
+    display: block;
+    width: 25px;
+    background: #d3d3d3;
+    content: '';
+    position: absolute;
+    left: -30px;
+    margin-top: 9px;
+}
+
+.inclusivedates {
+    font-size: 13px;
+    margin: 3px 0px;
+    color:#565657;
+}
+
+.statustext {
+    padding: 2px 12px;
+    border: 1px solid #ccc;
+    width: fit-content;
+    border-radius: 99px;
+    background: #dfdede;
+    margin-top: 7px;
+}
+
+.approved {
+    color:green;
+}
+
+.declined {
+    color:red;
+}
+
+.thedatediv{
+display: flex;
+justify-content: space-evenly;
+}
+
+.thedatediv hr {
+border-bottom: 1px solid #d3d3d3;
+height: 0px;
+width: 100%;
+border-top: 0px;
+}
+
+.unbold{
+    font-weight: normal;
+}
+
+.box-shadow-it {
+    box-shadow: 0px 0px 10px #d3d3d3;
+}
+
+.border-radius-it {
+    border-radius: 9px;
 }
 /* datatables */
 table.dataTable thead th, table.dataTable thead td {

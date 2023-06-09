@@ -36,16 +36,23 @@ class doleprocs {
             if (con == "yes") {
                 var conf = confirm("Are you sure you want to update?");
 
+                if (ishash != null) {
+                    if (!dp.checkpasswordstrength(val)) {
+                        alert("PASSWORD IS TOO WEAK.\n\nIt must be a combination of Uppercase and lowercase letters, special characters, numbers and must be 8 characters long.");
+                        return;
+                    }
+                }
+
                 if (!conf) {
                     return;
                 }
             }
 
-            $("<small class='saved-input' style='background: #8e8b8b;'> saving... </small>").appendTo(dis);
+            $("<small class='saved-input' style='background: #8e8b8b;'> <i class='fa fa-circle-o-notch fa-spin fa-3x fa-fw' aria-hidden='true' style='font-size: 13px;'></i> </small>").appendTo(dis);
 
             dp.savefunction(key, table, index, fld, val, function(){
                 $(document).find(".saved-input").remove();
-                $("<small class='saved-input'> Saved </small>").appendTo(dis);
+                $("<small class='saved-input'> <i class='fa fa-check' aria-hidden='true'></i> </small>").appendTo(dis);
 
                 if (isrefresh == "yes") {
                     window.location.reload();
@@ -63,7 +70,7 @@ class doleprocs {
 
             dp.savefunction(key, table, index, fld, val, function(data){
                 alert("success");
-            })
+            });
         });
     }
 
@@ -144,6 +151,46 @@ class doleprocs {
         var thechosenid = theurl.split("/")[index];
 
         return thechosenid;
+    }
+
+    checkpasswordstrength(password) {
+        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})');
+        
+        if (strongPassword.test(password)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    getCookie(cname) {
+      let name          = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+
+      let ca            = decodedCookie.split(';');
+      
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+
+      return "";
+    }
+
+    setCookie(cname, cvalue, exdays) {
+      const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      
+      let expires = "expires="+ d.toUTCString();
+      
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 }
 

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commutations', function (Blueprint $table) {
-            $table->increments("commutationpk");
+        Schema::create('vacationlocations', function (Blueprint $table) {
+            $table->increments("vacationlocpk");
             $table->string("thevalue");
             $table->timestamps();
         });
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commutations');
+        Schema::dropIfExists('vacationlocations');
     }
 };
