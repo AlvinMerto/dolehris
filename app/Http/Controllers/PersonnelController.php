@@ -30,15 +30,15 @@ class PersonnelController extends Controller
         DoleProcess::checksettings("hrnav");
 
         $employees  = personnel::all();
-        $positions  = positions::all();
+        $positions  = []; // positions::all();
 
         // get areas, offices, divisions
         $areas      = area_offices::all();
-        $offices    = offices::all();
-        $divisions  = divisions::all(); 
+        $offices    = []; // offices::all();
+        $divisions  = []; // divisions::all(); 
 
         // employment status
-        $emp_status = employment_types::all();
+        $emp_status = []; //employment_types::all();
 
         $selected   = [];
 
@@ -54,6 +54,18 @@ class PersonnelController extends Controller
         }
 
         return view("personnel.administration", compact("employees","selected","positions","areas","divisions","offices","emp_status","displaytabs"));
+    }
+
+    public function displayemps(Request $req) {
+        $areas          = area_offices::all();
+
+        if ($req->input("officeid") == "all") {
+            $employees  = personnel::all();
+        } else {
+            $employees  = personnel::where("area_office_id",$req->input("officeid"))->get();
+        }
+
+        return view("personnel.aplets.listofemps", compact("employees","areas"));
     }
 
     public function servicerecord() {

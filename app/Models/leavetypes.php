@@ -11,6 +11,6 @@ class leavetypes extends Model
 
     protected $table      = "leavetypes";
     protected $primaryKey = "leavetypepk";
-    protected $fillable   = ["theleave","created_at","updated_at"];
+    protected $fillable   = ["theleave","groupid","navigation","created_at","updated_at"];
 
 }

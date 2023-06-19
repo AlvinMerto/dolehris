@@ -14,7 +14,7 @@ class leaveapplications extends Model
     protected $fillable   = [
                 "leavetypeid","thedateinquestion",
                 "numberofdays","personnelid","commutationid",
-                "monetizationid","created_at","updated_at"
+                "created_at","updated_at"
             ];
 
 }

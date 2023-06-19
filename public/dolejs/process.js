@@ -192,9 +192,106 @@ class doleprocs {
       
       document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
+
+    thenavigation(thenav, tab = "personnel", dis = false, ullist = false , theinput = false, somefunction = false) {
+        // http://localhost:8000/personnel/administration/2
+
+        var listItems = $("#"+ullist+" li");
+
+        listItems.removeClass("selected-nav");
+        
+        for (let li of listItems) {
+            let product = $(li);
+           
+            if (product.data('nav') == thenav) {
+                product.addClass("selected-nav");
+            }
+        }
+
+        $.ajax({
+            url      : url+"/"+tab+"/"+thenav,
+            type     : "GET",
+            data     : { thechosenid : thechosenid },
+            dataType : "html",
+            success  : function(data){
+                if (theinput == false) {
+                     $(document).find("#theprofileinput").html(data);
+                } else {
+                     $(document).find("#"+theinput).html(data);
+                }
+
+                if (somefunction != false) {
+                    somefunction(data);
+                }
+            }, error : function(){
+                alert('error displaying data')
+            }
+        });
+    }
+
+    savetoinclusivedates(keyid, thedates, somefunction = false) {
+        $.ajax({
+            url      : url+"/savemultiple",
+            type     : "get",
+            data     : { leaveapplicationid : keyid , thedates : thedates },
+            dataType : "json",
+            success  : function(data){
+                if (somefunction != false) {
+                    somefunction(data);
+                }
+            }, error : function(){
+                alert("Error saving multiple entries to database");
+            }
+        });
+    }
+
+    savetoleavecard(leavetype, particularid, somefunction = false) {
+        $.ajax({
+            url      : url+"/savetoleavecard",
+            type     : "post",
+            data     : { leavetype : leavetype , particularid : particularid },
+            dataType : "json",
+            success  : function(data) {
+                if (somefunction != false) {
+                    somefunction(data);
+                }
+            }, error : function() {
+                alert("There was an error ")
+            }
+        });
+    }
 }
 
-let dp = new doleprocs();   
+let dp = new doleprocs();
     dp.ajaxsetup();
     dp.saveonblur();
     dp.bodystyle();
+
+        window.onload = function(){
+            $(document).on("click",".tabnav", function(){
+                let dis       = $(this);
+
+                let theparent = $(this).data("parent");
+                let thenav    = $(this).data("nav");
+
+                // // selected-nav
+                $(this).siblings().removeClass("selected-nav");
+                $(this).addClass("selected-nav");
+
+                // let storednav = dp.getCookie("dashboardnavigation");
+                // alert(storednav);
+
+                if (theparent == "dashboard") {
+                    dp.setCookie("dashboardnavigation", thenav, 365);
+                    dp.thenavigation( thenav , theparent, 0, "inside-nav-ul",0, function(){
+                        db.transformcalendar();
+                    });    
+                } else if (theparent == "personnel") {
+                     dp.setCookie("profilenavigation", thenav, 365);
+                    // dp.setCookie("profilenavigation", "profile", 365);
+                    // alert(dp.getCookie("profilenavigation"))
+                    dp.thenavigation( thenav , theparent, 0, "inside-nav-ul",0);
+                }
+            
+            });
+        }

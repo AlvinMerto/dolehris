@@ -67,5 +67,6 @@ class globalController extends Controller
         }
         
     }
+
     // end 
 }

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer("numberofdays");
             $table->integer("personnelid");
             $table->integer("commutationid")->nullable();
-            $table->integer("monetizationid")->nullable();
             $table->timestamps();
         });
     }

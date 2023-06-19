@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('vacationleavedetails', function (Blueprint $table) {
             $table->increments("vacationleavedetailspk");
             $table->integer("leaveapplicationid");
-            $table->boolean("iswithinphil")->nullable();
-            $table->boolean("isabroad")->nullable();
+            $table->integer("vacationlocationid")->nullable();
             $table->string("specify")->nullable();
             $table->timestamps();
         });

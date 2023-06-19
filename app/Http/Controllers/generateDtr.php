@@ -84,67 +84,69 @@ class generateDtr extends Controller
         $formatted_to           = trim($t_year)."-".trim($t_month)."-".trim($t_day);
         $formatted_to_counter   = date("Y-m-d", strtotime("+1 days ".$formatted_to));
 
-        $timeanddate = time_attendances::where("biometricid",$bioid)->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])->get();
-        $empdata     = personnel::where("biometricid",$bioid)->get();
+        // ** start of DTR
+            $timeanddate = time_attendances::where("biometricid",$bioid)->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])->get();
+            $empdata     = personnel::where("biometricid",$bioid)->get();
 
-        $name        = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
-        // $position    = $empdata[0]->
+            $name        = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
+            // $position    = $empdata[0]->
 
-        $skeds       = Schedules::where(["areaid"=>$empdata[0]->area_office_id,"groupid"=>"1"])->orderBy("theorder","asc")->get(["timeexact","thetime"])->toArray();
+            $skeds       = Schedules::where(["areaid"=>$empdata[0]->area_office_id,"groupid"=>"1"])->orderBy("theorder","asc")->get(["timeexact","thetime"])->toArray();
 
-        $schedule["morning_flexi_in"]    = $skeds[0]['thetime']; //"9:00:00";
-        $schedule["morning_flexi_out"]   = $skeds[1]['thetime']; //"12:00:00";
-        $schedule["afternoon_flexi_in"]  = $skeds[2]['thetime']; //"13:00:00";
-        $schedule["afternoon_flexi_out"] = $skeds[3]['thetime']; //"18:00:00";
+            $schedule["morning_flexi_in"]    = $skeds[0]['thetime']; //"9:00:00";
+            $schedule["morning_flexi_out"]   = $skeds[1]['thetime']; //"12:00:00";
+            $schedule["afternoon_flexi_in"]  = $skeds[2]['thetime']; //"13:00:00";
+            $schedule["afternoon_flexi_out"] = $skeds[3]['thetime']; //"18:00:00";
 
-        $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
+            $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
 
-        $dets = [
-                "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
-                "Full Name"       => $name,
-                "system verified" => "success"
-        ];
+            $dets = [
+                    "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
+                    "Full Name"       => $name,
+                    "system verified" => "success"
+            ];
 
-        $validcode   = DoleProcess::savevalidation("DTR",$empdata[0]->perid, $dets);
+            $validcode   = DoleProcess::savevalidation("DTR",$empdata[0]->perid, $dets);
 
-        $data        = [
-                        "timeanddate"   => $thedtr,
-                        "fullname"      => $name,
-                        "body"          => "Please find in the attached email your DTR.",
-                        "thedate"       => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
-                        "from"          => $formatted_from,
-                        "to"            => $formatted_to_counter,
-                        "signname"      => $signname,
-                        "signpost"      => $signpost,
-                        "validcode"     => $validcode[1],
-                        "srccode"       => url('/').$validcode[1],
-                        "emptype"       => $empdata[0]->employment_type_id
-                       ];
-        
-        $d["email"]   = $empdata[0]->email;
-        $d["title"]   = "Your DTR for ".date("F d, Y", strtotime($formatted_from))." to ".date("F d, Y", strtotime($formatted_to));
-        $d['name']    = $name;
-        $d['dtrdate'] = date("F d, Y", strtotime($formatted_from))." to ".date("F d, Y", strtotime($formatted_to));
+            $data        = [
+                            "timeanddate"   => $thedtr,
+                            "fullname"      => $name,
+                            "body"          => "Please find in the attached email your DTR.",
+                            "thedate"       => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),
+                            "from"          => $formatted_from,
+                            "to"            => $formatted_to_counter,
+                            "signname"      => $signname,
+                            "signpost"      => $signpost,
+                            "validcode"     => $validcode[1],
+                            "srccode"       => url('/').$validcode[1],
+                            "emptype"       => $empdata[0]->employment_type_id
+                           ];
+            
+            $d["email"]   = $empdata[0]->email;
+            $d["title"]   = "Your DTR for ".date("F d, Y", strtotime($formatted_from))." to ".date("F d, Y", strtotime($formatted_to));
+            $d['name']    = $name;
+            $d['dtrdate'] = date("F d, Y", strtotime($formatted_from))." to ".date("F d, Y", strtotime($formatted_to));
 
-        $pdf = PDF::loadView('pdf.dtr', $data);
-        $pdf->setOption(['defaultFont' => 'sans-serif', 'isRemoteEnabled' => true]);
-        
-        $pdf->set_paper('8.5x13', 'portrait');
-        // $pdf->set_paper("legal");
-        // $pdf->set_paper("A4");
-        
-        if ( strlen($d["email"]) == 0 ) {
-            return response()->json("noemail");
-        } else {
-            Mail::send('emails.dtrsent', $data, function($message)use($d, $pdf) {
-                $message->to($d["email"], $d["email"])
-                        ->from("no-reply@dole.gov.ph","DOLE HR")
-                        ->subject($d["title"])
-                        ->attachData($pdf->output(), $d['name']." DTR for ".$d['dtrdate'].".pdf");
-            });
+            $pdf = PDF::loadView('pdf.dtr', $data);
+            $pdf->setOption(['defaultFont' => 'sans-serif', 'isRemoteEnabled' => true]);
+            
+            $pdf->set_paper('8.5x13', 'portrait');
+            // $pdf->set_paper("legal");
+            // $pdf->set_paper("A4");
+            
+            if ( strlen($d["email"]) == 0 ) {
+                return response()->json("noemail");
+            } else {
+                Mail::send('emails.dtrsent', $data, function($message)use($d, $pdf) {
+                    $message->to($d["email"], $d["email"])
+                            ->from("no-reply@dole.gov.ph","DOLE HR")
+                            ->subject($d["title"])
+                            ->attachData($pdf->output(), $d['name']." DTR for ".$d['dtrdate'].".pdf");
+                });
 
-            return response()->json(true);
-        }
+                return response()->json(true);
+            }
+        // * end 
     }
     // end ajax calls
 
@@ -196,8 +198,8 @@ class generateDtr extends Controller
             $empdata         = personnel::where("biometricid",$id)->get();
 
             // $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
-            $name        = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
-            $thedtr      = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
+            $name           = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
+            $thedtr         = DoleProcess::compute_tardy_undertime($timeanddate, $formatted_from, $formatted_to_counter, $schedule, $empdata[0]->perid);
 
             $dets = [
                 "Inclusive Date"  => date("F d, Y", strtotime($formatted_from))." - ".date("F d, Y", strtotime($formatted_to)),

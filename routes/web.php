@@ -10,7 +10,7 @@ use App\Http\Controllers\globalController;
 use App\Http\Controllers\ValidationcodeController;
 use App\Http\Controllers\Signatories;
 use App\Http\Controllers\Dashboard;
-
+use App\Http\Controllers\LeaveapplicationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,25 +30,35 @@ use App\Http\Controllers\Dashboard;
 //** dashboard and dashboard components 
 // ->middleware(['auth', 'verified'])
     Route::middleware("auth")->group(function(){  
-         Route::get('/dashboard', [Dashboard::class,"dashboard"])->name('dashboard');
-         Route::get('/', [Dashboard::class,"dashboard"])->name('dashboard');
+        Route::get('/dashboard', [Dashboard::class,"dashboard"])->name('dashboard');
+        Route::get('/', [Dashboard::class,"dashboard"])->name('dashboard');
 
-         // ** for navigation in the dashboard 
+        // ** for navigation in the dashboard 
             Route::get("/dashboard/leaveapplications", [Dashboard::class,"leaveapplications"])->name("leaveapplications");
-         // * end 
+        // * end 
 
-         // ** leave components 
+        // ** leave components 
             Route::get("/vacationleave", [Dashboard::class,"vacationleave"])->name("vacationleave");
             Route::get("/sickleave", [Dashboard::class,"sickleave"])->name("sickleave");
             Route::get("/forcedleave",[Dashboard::class,"forcedleave"])->name('forcedleave');
-         // *
+        // *
+
+        // ** saving multiple 
+            Route::get("/savemultiple", [Dashboard::class,"savemultiple"])->name("savemultiple");
+        // *
+
+        // ** save to leave card table 
+            Route::get("/savetoleavecard", [Dashboard::class,"savetoleavecard"])->name("savetoleavecard");
+        // * end 
     });
 // * end dashboard
 
 Route::get('/verify/{qrcode?}', [ValidationcodeController::class,"verify"])->name('verify');
+Route::post("/checkvaliddates", [LeaveapplicationsController::class,"checkvaliddates"])->name("checkvaliddates");
 
 Route::get("/calculator", function(){
-    return view("attendance.calculator");
+    echo date("l");
+    // return view("attendance.calculator");
 })->name("calculator");
 
 Route::get("/calculate_tardy_under", [TimeAttendancesController::class,"calculate_tardy_under"]);
@@ -82,20 +92,24 @@ Route::middleware("auth")->group(function(){
     // end payslip
 
 
-    // personnel administration 
-    Route::get("/personnel/administration/{id?}", [PersonnelController::class,"administration"])->name("personneladministration");
-    Route::match(array('GET', 'POST'),"/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
-    //Route::get("/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
-    //Route::post("/personnel/upload",[PersonnelController::class,"uploademployees"])->name("uploademployees");
-    Route::get("/personnel/service-record/{id?}", [PersonnelController::class,"servicerecord"])->name("servicerecord");
-    Route::get("/personnel/personnel-directory/{id?}",[PersonnelController::class,"personneldirectory"])->name("personneldirectory");
-    Route::get("/personnel/reporting-analytics/{id?}",[PersonnelController::class,"reportinganalytics"])->name("reportinganalytics");
+    // **personnel administration 
+        Route::get("/personnel/administration/{id?}", [PersonnelController::class,"administration"])->name("personneladministration");
+        Route::match(array('GET', 'POST'),"/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
+        //Route::get("/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
+        //Route::post("/personnel/upload",[PersonnelController::class,"uploademployees"])->name("uploademployees");
+        Route::get("/personnel/service-record/{id?}", [PersonnelController::class,"servicerecord"])->name("servicerecord");
+        Route::get("/personnel/personnel-directory/{id?}",[PersonnelController::class,"personneldirectory"])->name("personneldirectory");
+        Route::get("/personnel/reporting-analytics/{id?}",[PersonnelController::class,"reportinganalytics"])->name("reportinganalytics");
 
-        // called from ajax :: personnel administration panel
-            Route::get("/personnel/profile", [PersonnelController::class,"profile"])->name("theprofile");
-            Route::get("/personnel/leavecredits",[LeavecardsController::class,"leavecredits"])->name("leavecredits");
-        // end 
-    // end 
+            // called from ajax :: personnel administration panel
+                Route::get("/personnel/profile", [PersonnelController::class,"profile"])->name("theprofile");
+                Route::get("/personnel/leavecredits",[LeavecardsController::class,"leavecredits"])->name("leavecredits");
+            // end 
+
+            // ** inside dashboard 
+                Route::get("/loademployees",[PersonnelController::class,"displayemps"])->name("displayemps");
+            // *
+    // * end 
 
     // leave window
         Route::get("/leavewindowparent", function(){

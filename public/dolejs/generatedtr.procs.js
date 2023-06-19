@@ -95,7 +95,7 @@ class generateDtr {
             personnel_ids = [];
             id_move       = 0;
             
-            // window.location.reload();
+            window.location.reload();
         }
 
         $(document).find("#status_"+personnel_ids[id_move]).html("sending DTR... Please wait");

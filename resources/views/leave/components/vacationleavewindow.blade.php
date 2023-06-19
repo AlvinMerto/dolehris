@@ -9,7 +9,9 @@
 										<tr>
 											<td class='center-it pd-t-5 pd-b-5' 
 												style='width: 25px;'> 
-												<input type='radio' name='vacayloc[]' 
+												<input type='radio' 
+													   name='vacayloc[]' 
+													   class='vacationloc'
 													   id='vac_loc_<?php echo $vloc->vacationlocpk; ?>' 
 													   value='<?php echo $vloc->vacationlocpk; ?>'/> 
 											</td>
@@ -23,11 +25,16 @@
 									<!-- <tr>
 										<td class='center-it pd-t-5 pd-b-5' style='width: 25px;'> <input type='radio'  name='vacayloc[]' id='abroadchck' value='2'/> </td>
 										<td class='pd-t-5 pd-b-5'> <label for='abroadchck' class='mg-b-0'> Abroad </label> </td>
-									</tr>
+									</tr>-->
 									<tr>
-										<td> &nbsp;</td>
-										<td> <input type='text' class='form-control max-width'/> </td>
-									</tr> -->
+										<!-- <td> &nbsp;</td> -->
+										<td colspan="2"> 
+											<input type='text' 
+												   class='form-control max-width' 
+												   placeholder='Specify the location' 
+												   id='specificloc'/>
+										</td>
+									</tr>
 								</tbody>
 							</table>
 
@@ -39,7 +46,9 @@
 									<?php foreach($commutation as $c) { ?>
 										<tr>
 											<td class='center-it pd-t-5 pd-b-5' style='width: 25px;'> 
-												<input type='radio' name='commutation[]' 
+												<input type='radio' 
+														class='iscommutation'
+														name='commutation[]' 
 														id='commutation_<?php echo $c->commutationpk; ?>' 
 														value='<?php echo $c->commutationpk ?>'/> 
 											</td>

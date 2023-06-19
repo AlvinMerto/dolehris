@@ -14,32 +14,26 @@ class personnel {
                 thechosenid = dp.gettheurlparameter(5, window.location.href);
 
                 // let storednav = dp.getCookie("dashboardnavigation");
-
-                person.thenavigation("profile");
+                // alert(dp.getCookie("profilenavigation"));
+                 dp.thenavigation( dp.getCookie("profilenavigation") , 'personnel' , 0 ,"inside-nav-ul",0, function(){
+                    db.transformcalendar();
+                 });
+                // dp.thenavigation("profile", "personnel", 0 , "inside-nav-ul", 0);
                
+            } else {
+                // alert(dp.getCookie("dashboardnavigation"))
+                // dp.thenavigation( dp.getCookie("dashboardnavigation") , 'dashboard' , 0 ,"inside-nav-ul",0);
             }
-
-        });
-
-        $(document).on("click",".tabnav", function(){
-            // let dis       = $(this);
-            let theparent = $(this).data("parent");
-            let thenav    = $(this).data("nav");
-
-            // // selected-nav
-            $(this).siblings().removeClass("selected-nav");
-            $(this).addClass("selected-nav");
 
             // dp.setCookie("dashboardnavigation", thenav, 365);
 
-            // let storednav = dp.getCookie("dashboardnavigation");
+            person.loademployeeshere( "all" );
+        });
 
-            if (undefined === theparent) {
-                person.thenavigation( thenav , "personnel");    
-            } else {
-                person.thenavigation( thenav , theparent);
-            }
-            
+
+
+        $(document).on("change","#officechange", function(){
+            person.loademployeeshere( $(this).val() );
         });
 
         $(document).on("click","#saveaccount", function(){
@@ -75,11 +69,13 @@ class personnel {
                             dets.userid     = userid;
                             dets.thenav     = $(document).find("#therole").val();
 
-                        dp.savethis("usersettings", dets, null , function(data){
-                            alert("User is saved");
-                        });
+                        // ** save as new entry
+                            dp.savethis("usersettings", dets, null , function(data){
+                                alert("User is saved");
+                            });
+                        // *
 
-                        // update the user_id field
+                        // ** update the existing value :: user_id field
                             dp.savefunction("perid", "personnels", thechosenid, "user_id", userid, function(data){
                                 alert("Personnel updated");
                             }, null);
@@ -90,18 +86,16 @@ class personnel {
         });
     }
 
-    thenavigation(thenav, tab = "personnel", dis = false) {
-        // http://localhost:8000/personnel/administration/2
-
+    loademployeeshere(officeid) {
         $.ajax({
-            url      : url+"/"+tab+"/"+thenav,
-            type     : "GET",
-            data     : { thechosenid : thechosenid },
-            dataType : "html",
-            success  : function(data){
-                $(document).find("#theprofileinput").html(data);
-            }, error : function(){
-                alert('error displaying data')
+            url       : url+"/loademployees",
+            type      : "get",
+            data      : { officeid : officeid },
+            dataType  : "html",
+            success   : function(data) {
+                $(document).find("#loadempshere").html(data);
+            }, error  : function() {
+                alert("Error in getting the employees");
             }
         });
     }
@@ -110,3 +104,4 @@ class personnel {
 
 let person = new personnel();
     person.eventlisteners();
+

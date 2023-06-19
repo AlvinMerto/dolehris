@@ -8,37 +8,48 @@
 				</p>
 				<div class="input-group mg-b-10">
 					<input type='text' class='form-control mg-b-10 datepick_txtbox'/>
-					<button class='btn btn-default btn-xs'> Add date </button>
+					<!-- <button class='btn btn-default btn-xs' id='queuedate'> Add date </button> -->
 				</div>
 				<select class="form-control select2-show-search" data-placeholder="Choose one" id='leavetypeselect'>
 					<option value='0'> -- SELECT -- </option>
 					<optgroup label="Leave Applications">
-						<option value='vacationleave'> Vacation Leave (Sec. 51, Rule XVI, Omnibus Rules Implementing E.O. No. 292) </option>
-						<option value='forcedleave'> Mandatory/Forced Leave (Sec. 25, Rule XVI, Omnibus Rules Implementing E.O. No. 292) </option>
-						<option value='sickleave'> Sick Leave (Sec. 43, Rule XVI, Omnibus Rules Implementing E.O. No. 292) </option>
-						<option> Maternity Leave (R.A. No. 11210 / IRR issued by CSC, DOLE and SSS) </option>
-						<option> Paternity Leave (R.A. No. 8187 / CSC MC No. 71, s. 1998, as amended) </option>
-						<option> Special Privilege Leave (Sec. 21, Rule XVI, Omnibus Rules Implementing E.O. No. 292) </option>
-						<option> Solo Parent Leave (RA No. 8972 / CSC MC No. 8, s. 2004) </option>
-						<option> Study Leave (Sec. 68, Rule XVI, Omnibus Rules Implementing E.O. No. 292) </option>
-						<option> 10-Day VAWC Leave (RA No. 9262 / CSC MC No. 15, s. 2005) (Specify Illness) </option>
-						<option> Rehabilitation Privilege (Sec. 55, Rule XVI, Omnibus Rules Implementing E.O. No. 292) </option>
-						<option> Special Leave Benefits for Women (RA No. 9710 / CSC MC No. 25, s. 2010) </option>
-						<option> Special Emergency (Calamity) Leave (CSC MC No. 2, s. 2012, as amended) Completion of Master's Degree </option>
-						<option>Adoption Leave(R.A. No. 8552) </option>
+						<?php
+							foreach($leavetypes as $lt ) {
+								if ($lt->groupid == 1) {
+									echo "<option value='{$lt->leavetypepk}_{$lt->navigation}'> {$lt->theleave} </option>";
+								}
+							}
+						?>
 					</optgroup>
+
 					<optgroup label='Official Business'>
-						<option> Apply for OB </option>
+						<?php
+							foreach($leavetypes as $lt ) {
+								if ($lt->groupid == 2) {
+									echo "<option value='{$lt->leavetypepk}_{$lt->navigation}'> {$lt->theleave} </option>";
+								}
+							}
+						?>
 					</optgroup>
+
 					<optgroup label='Compensatory Time-Off'>
-						<option> Apply for CTO </option>
+						<?php
+							foreach($leavetypes as $lt ) {
+								if ($lt->groupid == 3) {
+									echo "<option value='{$lt->leavetypepk}_{$lt->navigation}'> {$lt->theleave} </option>";
+								}
+							}
+						?>
 					</optgroup>
-					<optgroup label='Compassionate Time-Off'>
-						<option> Apply for Compassionate time-off </option>
-					</optgroup>
+
 					<optgroup label='Other Purpose'>
-						<option> Monetization of Leave Credits </option>
-						<option> Terminal Leave </option>
+						<?php
+							foreach($leavetypes as $lt ) {
+								if ($lt->groupid == 4) {
+									echo "<option value='{$lt->leavetypepk}_{$lt->navigation}'> {$lt->theleave} </option>";
+								}
+							}
+						?>
 					</optgroup>
 				</select>
 
@@ -50,7 +61,7 @@
 
 					<div class="mg-t-25" style="text-align: right;">
 						<button class="btn btn-primary"> Print </button>
-						<button class="btn btn-primary" id='sendapplication'> Send Application </button>
+						<button class="btn btn-primary" id='sendapplication' data-id='<?php echo $empid; ?>'> Send Application </button>
 					</div>
 			</div>
 		</div>
@@ -99,12 +110,4 @@
 	</div>
 </div>
 
-<script src="{{asset('dolejs/dashboard.procs.js')}}"></script>
 
-<script>
-	$('.datepick_txtbox').daterangepicker({
-            "autoApply": true,
-        }, function(start, end, label) {
-            
-        });
-</script>
