@@ -18,10 +18,14 @@ class Dashboard {
 	listentoevent() {
 		$(document).ready(function(){
 			// alert(dp.getCookie("dashboardnavigation"))
+			if (dp.getCookie("dashboardnavigation") == "") {
+                // set the navigation here
+                dp.setCookie("dashboardnavigation","leaveapplications", 365);
+            }
+
 			dp.thenavigation( dp.getCookie("dashboardnavigation") , 'dashboard' , 0 ,"inside-nav-ul",0, function(){
 				db.transformcalendar();
 			});
-
 		});
 
 		$(document).on("change","#leavetypeselect", function(){
@@ -48,9 +52,9 @@ class Dashboard {
 		});
 
 		$(document).on("click","#sendapplication", function(){
-			let lts 	= $(document).find("#leavetypeselect").val();
+			let lts 						= $(document).find("#leavetypeselect").val();
 
-			var details = new Object();
+			var details 					= new Object();
 				details.leavetypeid			= selectedleave;
 				details.thedateinquestion 	= "0";
 				details.numberofdays 		= alldates.length;
@@ -71,7 +75,7 @@ class Dashboard {
 				//* end vacation leave 
 
 				//** if sick leave:: save to sick leave details 
-
+					//** code here
 				//* end sick leave details
 
 				// **------ save to inclusive dates ------------

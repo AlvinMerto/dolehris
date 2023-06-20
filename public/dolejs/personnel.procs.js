@@ -15,11 +15,17 @@ class personnel {
 
                 // let storednav = dp.getCookie("dashboardnavigation");
                 // alert(dp.getCookie("profilenavigation"));
-                 dp.thenavigation( dp.getCookie("profilenavigation") , 'personnel' , 0 ,"inside-nav-ul",0, function(){
+
+                if (dp.getCookie("profilenavigation") == "") {
+                    // set the navigation here
+                    dp.setCookie("profilenavigation","profile", 365);
+                }
+
+                dp.thenavigation( dp.getCookie("profilenavigation") , 'personnel' , 0 ,"inside-nav-ul",0, function(){
                     db.transformcalendar();
-                 });
+                });
+                
                 // dp.thenavigation("profile", "personnel", 0 , "inside-nav-ul", 0);
-               
             } else {
                 // alert(dp.getCookie("dashboardnavigation"))
                 // dp.thenavigation( dp.getCookie("dashboardnavigation") , 'dashboard' , 0 ,"inside-nav-ul",0);

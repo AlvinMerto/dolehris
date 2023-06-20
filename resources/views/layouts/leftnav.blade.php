@@ -56,7 +56,33 @@
         <a href="{{route('leavecabinet')}}" class="br-menu-link <?php echo ($firstpath=="leavecards")?"active":null; ?>"> <!-- active -->
           <div class="br-menu-item">
             <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
-            <span class="menu-item-label">Leave Cards</span>
+            <span class="menu-item-label">Leave Card</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
+
+        <label class="sidebar-label pd-x-15 mg-t-20">Time Records</label>
+        <a href="{{route('leavecabinet')}}" class="br-menu-link <?php echo ($firstpath=="leavecards")?"active":null; ?>"> <!-- active -->
+          <div class="br-menu-item">
+            <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+            <span class="menu-item-label">Daily Time Record</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
+        <a href="{{route('leavecabinet')}}" class="br-menu-link <?php echo ($firstpath=="leavecards")?"active":null; ?>"> <!-- active -->
+          <div class="br-menu-item">
+            <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+            <span class="menu-item-label">For Submission</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
+        <a href="{{route('leavecabinet')}}" class="br-menu-link <?php echo ($firstpath=="leavecards")?"active":null; ?>"> <!-- active -->
+          <div class="br-menu-item">
+            <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+            <span class="menu-item-label">Raw Time Records</span>
+          </div><!-- menu-item -->
+        </a><!-- br-menu-link -->
+        <a href="{{route('leavecabinet')}}" class="br-menu-link <?php echo ($firstpath=="leavecards")?"active":null; ?>"> <!-- active -->
+          <div class="br-menu-item">
+            <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+            <span class="menu-item-label">Record Range</span>
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
 

@@ -76,10 +76,10 @@ Route::post("/checkvaliddates", [LeaveapplicationsController::class,"checkvalidd
             echo $s->settings()->thenav;
         }
     });
+
+    Route::get("/calculate_tardy_under", [TimeAttendancesController::class,"calculate_tardy_under"]);
 // ===============================================================
 //** end 
-
-Route::get("/calculate_tardy_under", [TimeAttendancesController::class,"calculate_tardy_under"]);
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -136,6 +136,7 @@ Route::middleware("auth")->group(function(){
     // signatories 
         Route::get("/signatories",[Signatories::class,"edit"])->name("signatories");
     // end signatories
+
 });
 
 // ajax calls 
