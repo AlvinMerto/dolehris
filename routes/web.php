@@ -56,10 +56,28 @@ use App\Http\Controllers\LeaveapplicationsController;
 Route::get('/verify/{qrcode?}', [ValidationcodeController::class,"verify"])->name('verify');
 Route::post("/checkvaliddates", [LeaveapplicationsController::class,"checkvaliddates"])->name("checkvaliddates");
 
-Route::get("/calculator", function(){
-    echo date("l");
-    // return view("attendance.calculator");
-})->name("calculator");
+//** used as a test
+// ===============================================================
+    Route::get("/calculator", function(){
+        $am_start    = "03:18:20";
+        $thold_am_in = "9:00:00";
+        if ($am_start > $thold_am_in) {
+            echo "AM is greater than threshold";
+        } else {
+            echo "am is less than threshold";
+        }
+    })->name("calculator");
+
+    Route::get("/testsig", function(){
+        $sets = App\Models\User::get();
+
+        foreach($sets as $s) {
+            echo $s->name;
+            echo $s->settings()->thenav;
+        }
+    });
+// ===============================================================
+//** end 
 
 Route::get("/calculate_tardy_under", [TimeAttendancesController::class,"calculate_tardy_under"]);
 
@@ -94,9 +112,7 @@ Route::middleware("auth")->group(function(){
 
     // **personnel administration 
         Route::get("/personnel/administration/{id?}", [PersonnelController::class,"administration"])->name("personneladministration");
-        Route::match(array('GET', 'POST'),"/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
-        //Route::get("/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
-        //Route::post("/personnel/upload",[PersonnelController::class,"uploademployees"])->name("uploademployees");
+        Route::match(array('GET','POST'),"/personnel/upload", [PersonnelController::class,"uploademployees"])->name("uploademployees");
         Route::get("/personnel/service-record/{id?}", [PersonnelController::class,"servicerecord"])->name("servicerecord");
         Route::get("/personnel/personnel-directory/{id?}",[PersonnelController::class,"personneldirectory"])->name("personneldirectory");
         Route::get("/personnel/reporting-analytics/{id?}",[PersonnelController::class,"reportinganalytics"])->name("reportinganalytics");
@@ -108,7 +124,7 @@ Route::middleware("auth")->group(function(){
 
             // ** inside dashboard 
                 Route::get("/loademployees",[PersonnelController::class,"displayemps"])->name("displayemps");
-            // *
+            // **
     // * end 
 
     // leave window
@@ -158,16 +174,5 @@ Route::middleware("auth")->group(function(){
         echo "Displaying applicants";
     });
 // end applicants page
-
-
-Route::get("/testsig", function(){
-    $sets = App\Models\User::get();
-
-    foreach($sets as $s) {
-        echo $s->name;
-        echo $s->settings()->thenav;
-    }
-});
-
 
 require __DIR__.'/auth.php';

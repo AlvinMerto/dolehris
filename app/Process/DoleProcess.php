@@ -122,7 +122,13 @@
                                     if ($am_start < $thold_am_in) {
                                         $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
                                     } else {
-                                        $supposed_pm_out  = "17:00:00";
+                                         if ( date("H", strtotime($pm_end)) <= 6 ) { //** for overtime crossing dates
+                                            //** if the pm end is below 6 am, then bypass the computation of tardiness for the afternoon
+                                            //*  set all flags to false to bypass the computation
+                                            $pass_under_pm = false;
+                                        } else {
+                                            $supposed_pm_out  = "17:00:00";
+                                        }
                                     }
                                 } else {
                                     $supposed_pm_out  = "17:00:00";
@@ -140,8 +146,15 @@
                                     if ($am_start > $thold_am_in) {
                                         $supposed_pm_out  = $schedule['afternoon_flexi_out'];
                                     } else {
-                                        // the threshold for the PM OUT is 9 hours from AM IN :: including the 12NN to 1PM break
-                                        $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
+                                        //** the threshold for the PM OUT is 9 hours from AM IN :: including the 12NN to 1PM break
+
+                                        if ( date("H", strtotime($pm_end)) <= 6 ) { //** for overtime crossing dates
+                                            //** if the pm end is below 6 am, then bypass the computation of tardiness for the afternoon
+                                            //*  set all pass_under_pm flag to false to bypass the computation of afternoon time out
+                                            $pass_under_pm = false;
+                                        } else {
+                                            $supposed_pm_out  = date("H:i:s", strtotime("+9 hours ".$am_start));
+                                        }
                                     }
                                 } else {
                                     $supposed_pm_out  = $schedule['afternoon_flexi_out'];

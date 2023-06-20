@@ -68,6 +68,12 @@ class TimeAttendancesController extends Controller
                     $timeactual = "am_end";
                 } else if ( date("H", strtotime($thetime)) > 12 ) { // for early out in the afternoon
                     $timeactual = "pm_end";
+                } else if ( date("H", strtotime($thetime)) <= 6 )  { // for overtime crossing the date after 12mn
+                    //** set the threshold to 6am or less
+                    //** if time is less 6am or less, set the date backward
+                    //** and use the time as the time out of for the date before
+                    $thedate    = date("Y-m-d", strtotime($thedate."-1 days"));
+                    $timeactual = "pm_end";
                 } else if ( date("H", strtotime($thetime)) < 12 ) { // for early out in the morning
                     $timeactual = "am_end";
                 }
