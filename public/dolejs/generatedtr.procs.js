@@ -126,7 +126,12 @@ class generateDtr {
                 gd.senddtr(personnel_ids[id_move]);
 
             }, error : function(a,b,c) {
-                alert(a+b+c)
+                var themsg = "<p class='dtrnotsent'> A fatal Error Occured </p>";
+
+                $(document).find("#status_"+personnel_ids[id_move]).html(themsg);
+
+                id_move++;
+                gd.senddtr(personnel_ids[id_move]);
             }
         });
     }

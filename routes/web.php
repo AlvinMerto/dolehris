@@ -59,6 +59,8 @@ Route::post("/checkvaliddates", [LeaveapplicationsController::class,"checkvalidd
 //** used as a test
 // ===============================================================
     Route::get("/calculator", function(){
+        echo ltrim("20", "0");
+
         $am_start    = "03:18:20";
         $thold_am_in = "9:00:00";
         if ($am_start > $thold_am_in) {
