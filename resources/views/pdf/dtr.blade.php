@@ -196,6 +196,7 @@
                     <td class='bold-it center-it broken-border-td autofit'> OUT </td>
                     <td class='bold-it center-it border-right border-left border-bottom'> TARDY </td>
                     <td class='bold-it center-it border-right border-left border-bottom'> UNDERTIME </td>
+                    <td class='bold-it center-it border-right border-left border-bottom'> OT </td>
                     <td class='bold-it center-it border-td ' style="width:200px;"> REMARKS </td>
                 </tr>
                 <?php
@@ -218,6 +219,7 @@
                             echo "<td class='center-it broken-border-td'> {$timeanddate[$theval]['pm_end']} </td>";
                             echo "<td class='center-it border-right border-left border-bottom'> {$timeanddate[$theval]['tardy']} </td>";
                             echo "<td class='center-it border-right border-left border-bottom'> {$timeanddate[$theval]['undertime']} </td>";
+                            echo "<td class='bold-it center-it border-td'>  </td>";
                             echo "<td class='bold-it center-it border-td'>  </td>";
                             echo "</tr>";
                     }
