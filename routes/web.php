@@ -58,6 +58,22 @@ Route::post("/checkvaliddates", [LeaveapplicationsController::class,"checkvalidd
 
 //** used as a test
 // ===============================================================
+
+Route::get("/test", function(){
+     $str = "alvin";
+     $rev = null;
+
+     for($i=strlen($str)-1;$i>=0;$i--) {
+        $rev .= $str[$i];
+     }
+
+     if ($str == $rev) {
+        echo "palindrome";
+     } else {
+        echo "not";
+     }
+});
+
     Route::get("/calculator", function(){
         echo ltrim("20", "0");
 
