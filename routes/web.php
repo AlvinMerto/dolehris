@@ -105,6 +105,8 @@ Route::get("/test", function(){
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
+Route::get("/updatetlog", [generateDtr::class,"updatetlog"]);
+
 Route::middleware("auth")->group(function(){
     Route::get("/leavecabinet", function(){
         return view("leave/cabinet");

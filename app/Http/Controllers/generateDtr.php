@@ -85,9 +85,11 @@ class generateDtr extends Controller
         $formatted_to_counter   = date("Y-m-d", strtotime("+1 days ".$formatted_to));
 
         // ** start of DTR
-            $timeanddate = time_attendances::where("biometricid",$bioid)->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])->get();
             $empdata     = personnel::where("biometricid",$bioid)->get();
-
+            $timeanddate = time_attendances::where(["biometricid"=>$bioid, "status"=>$empdata[0]->area_office_id])
+                            ->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])
+                            ->get();
+            
             $name        = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
             // $position    = $empdata[0]->
 
@@ -194,8 +196,13 @@ class generateDtr extends Controller
         $schedule["afternoon_flexi_out"] = $skeds[3]['thetime']; //"18:00:00";
 
         foreach($ids as $id) {
-            $timeanddate     = time_attendances::where("biometricid",$id)->get();
-            $empdata         = personnel::where("biometricid",$id)->get();
+            // $timeanddate     = time_attendances::where("biometricid",$id)->get();
+            // $empdata         = personnel::where("biometricid",$id)->get();
+
+            $empdata     = personnel::where("biometricid",$id)->get();
+            $timeanddate = time_attendances::where(["biometricid"=>$id,"status"=>$empdata[0]->area_office_id])
+                            ->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])
+                            ->get();
 
             // $name        = $empdata[0]->lname.", ".$empdata[0]->fname." ".$empdata[0]->mname;
             $name           = $empdata[0]->fname." ".$empdata[0]->mname." ".$empdata[0]->lname;
@@ -256,5 +263,11 @@ class generateDtr extends Controller
     function uploadattendance() {
        $areas       = area_offices::all();
        return view("attendance.upload", compact("areas"));
+    }
+
+    function updatetlog() {
+        $a = time_attendances::where("status","1")->update(["status"=>"11"]);
+
+        var_dump($a);
     }
 }
