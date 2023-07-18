@@ -272,13 +272,15 @@
                     if ($tardy != null) {
                         // ** temporarily disabled the saving of tardiness and undertime
                         // ** until such time that the database and the system is established
-                        //DoleProcess::savetardyundertime($personnelid, "t" , $tardy, $thedate);
+
+                        // DoleProcess::savetardyundertime($personnelid, "t" , $tardy, $thedate);
                     }
                     
                     if ($under != null) {
                         // ** temporarily disabled the saving of tardiness and undertime
                         // ** until such time that the database and the system is established
-                        //DoleProcess::savetardyundertime($personnelid, "u" , $under, $thedate);
+
+                        // DoleProcess::savetardyundertime($personnelid, "u" , $under, $thedate);
                     }
                     
 				} // end of for loop
