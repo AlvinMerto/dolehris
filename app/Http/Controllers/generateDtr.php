@@ -252,4 +252,9 @@ class generateDtr extends Controller
 
         return response()->json(["name"=>trim($signatory[0]->fname)." ".trim($signatory[0]->mname)."".trim($signatory[0]->lname),"position"=>$signatory[0]->theposition]);
     }
+
+    function uploadattendance() {
+       $areas       = area_offices::all();
+       return view("attendance.upload", compact("areas"));
+    }
 }

@@ -6,6 +6,14 @@
             <div id="slWrapper2" class="parsley-select wd-250 mg-t-30">
                 <form method='post' action="{{ route('uploadtimelog') }}"  enctype='multipart/form-data'>
                     @csrf
+                    <select class='form-control mg-b-5' name='arealocation'>
+                        <option value='none'> Area </option>
+                            <?php
+                                foreach($areas as $a) {
+                                    echo "<option value='{$a->areaofficepk}'>{$a->theareaoffice}</option>";
+                                }
+                            ?>
+                    </select>
                     <!-- <select class="form-control select2 mg-b-5" name='officearea'>
                         <option label="Choose one"></option>
                         <option value="davaocentral">Davao Central</option>

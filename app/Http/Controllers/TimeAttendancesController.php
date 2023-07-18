@@ -17,7 +17,14 @@ class TimeAttendancesController extends Controller
     //
 
     function uploadtlog(Request $req) {
-        $extension          = $req->file('employeetimelog')->getClientOriginalExtension();
+        $extension    = $req->file('employeetimelog')->getClientOriginalExtension();
+
+        $areaid       = $req->input("arealocation");
+
+        if ($areaid == "none") {
+            die("please go back is select the area");
+            return;
+        }
 
         if ($extension != "dat") {
             die("Please upload a file with a .dat file format");
@@ -27,7 +34,9 @@ class TimeAttendancesController extends Controller
         $tfile 		  = fopen($file,"r");
 
         $personalinfo = file($file);
-            
+        
+
+
         foreach($personalinfo as $p) {
             //$a = (string) $personalinfo[0];
 
@@ -85,7 +94,7 @@ class TimeAttendancesController extends Controller
                                     "theattendance" => $thedate." ".$thetime,
                                     "cstatus"       => $cstatus,
                                     "timeactual"    => $timeactual,
-                                    "status"        => 1
+                                    "status"        => $areaid
                                 ]);
                 // echo $save->id."<br/>";
                 

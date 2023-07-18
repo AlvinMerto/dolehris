@@ -110,9 +110,11 @@ Route::middleware("auth")->group(function(){
         return view("leave/cabinet");
     })->name("leavecabinet");
     
-    Route::get("/attendance/upload", function(){
-        return view("attendance.upload");
-    });
+    // Route::get("/attendance/upload", function(){
+    //     return view("attendance.upload");
+    // });
+
+    Route::get("/attendance/upload", [generateDtr::class, "uploadattendance"]);
     
     Route::get("/attendance/generate", [generateDtr::class,"index"])->name("attendancegenerate");
     Route::get("/download/dtr",[generateDtr::class,"downloaddtr"])->name("downloaddtr");
