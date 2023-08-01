@@ -67,6 +67,8 @@ class generateDtr extends Controller
         $signname = $req->input('sign_name');
         $signpost = $req->input("sign_post");
 
+        $areaofficeid  = $req->input("areaofficeid");
+
         if (strlen($bioid) == 0) {
             return response()->json("nobioid");
         }
@@ -85,7 +87,8 @@ class generateDtr extends Controller
         $formatted_to_counter   = date("Y-m-d", strtotime("+1 days ".$formatted_to));
 
         // ** start of DTR
-            $empdata     = personnel::where("biometricid",$bioid)->get();
+            // $empdata     = personnel::where("biometricid",$bioid)->get();
+            $empdata     = personnel::where(["biometricid"=>$id,"area_office_id"=>$areaofficeid])->get();
             $timeanddate = time_attendances::where(["biometricid"=>$bioid, "status"=>$empdata[0]->area_office_id])
                             ->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])
                             ->get();
@@ -199,7 +202,7 @@ class generateDtr extends Controller
             // $timeanddate     = time_attendances::where("biometricid",$id)->get();
             // $empdata         = personnel::where("biometricid",$id)->get();
 
-            $empdata     = personnel::where("biometricid",$id)->get();
+            $empdata     = personnel::where(["biometricid"=>$id,"area_office_id"=>$areaid])->get();
             $timeanddate = time_attendances::where(["biometricid"=>$id,"status"=>$empdata[0]->area_office_id])
                             ->whereBetween("theattendance",[$formatted_from,$formatted_to_counter])
                             ->get();

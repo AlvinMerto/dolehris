@@ -3,6 +3,7 @@ let id_move       = 0;
 let thedate       = null;
 let sign_name     = null;
 let sign_post     = null;
+let areaofficeid  = null;
 
 var table;
 
@@ -39,7 +40,7 @@ class generateDtr {
         });
 
         $(document).on("change","#arealocation", function(){
-            let theid = $(this).val();
+            let theid = areaofficeid = $(this).val();
         
             $.ajax({
                 url     : url+"/getsignatories",
@@ -107,7 +108,7 @@ class generateDtr {
         $.ajax({
             url      : url+"/senddtr",
             type     : "post",
-            data     : { biometricid : bioid , thedate : thedate, sign_name : sign_name, sign_post : sign_post },
+            data     : { biometricid : bioid , thedate : thedate, sign_name : sign_name, sign_post : sign_post , areaofficeid : areaofficeid },
             dataType : "json",
             success  : function(data){
                 var themsg = null;
